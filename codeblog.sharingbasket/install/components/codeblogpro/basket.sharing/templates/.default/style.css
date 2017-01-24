@@ -1,0 +1,11 @@
+#codeblog_basket_saving_completed {
+    display: none;
+}
+
+#codeblog_basket_showing_enter_code {
+    display: none;
+}
+
+#codeblog_basket_notification {
+    color: red;
+}

@@ -1,0 +1,3 @@
+<?
+$MESS['CODEBLOG_SHARING_BASKET_OPT']  = 'Настройки';
+$MESS['CODEBLOG_SHARING_BASKET_NULL'] = 'Пример опции';
