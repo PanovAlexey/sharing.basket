@@ -10,7 +10,7 @@
 
 namespace CodeBlog\SharingBasket\Storage;
 
-use Bitrix\Highloadblock\HighloadBlockTable;
+use \Bitrix\Highloadblock\HighloadBlockTable;
 
 \Bitrix\Main\Loader::includeModule('highloadblock');
 
@@ -31,7 +31,7 @@ class Highloadblock implements SaveAndRestore
         $highloadBlockParams = ['NAME'       => self::STORAGE_NAME,
                                 'TABLE_NAME' => 'codeblog_sharing_basket_storage'];
 
-        $highloadBlock = Bitrix\Highloadblock\HighloadBlockTable::add($highloadBlockParams);
+        $highloadBlock = HighloadBlockTable::add($highloadBlockParams);
         if (!$highloadBlock->isSuccess()) {
             //$errors = $highloadBlock->getErrorMessages();
         } else {
