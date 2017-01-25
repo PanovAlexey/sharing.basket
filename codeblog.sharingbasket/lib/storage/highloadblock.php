@@ -33,6 +33,9 @@ class Highloadblock implements SaveAndRestore
 
         $highloadBlock = HighloadBlockTable::add($highloadBlockParams);
         if (!$highloadBlock->isSuccess()) {
+            /**
+             * @TODO: Добавить обоаботку ошибки создания хайлоадблока
+             */
             //$errors = $highloadBlock->getErrorMessages();
         } else {
             $highblockId = $highloadBlock->getId();

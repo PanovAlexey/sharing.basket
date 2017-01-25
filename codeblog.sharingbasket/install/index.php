@@ -20,6 +20,7 @@ use CodeBlog\SharingBasket\Storage;
 
 Loc::loadMessages(__FILE__);
 
+
 class codeblog_sharingbasket extends \CModule
 {
 
