@@ -69,6 +69,10 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
         $this->arResult['URL']['CLEAR'] = $urlClear->getUri();
 
+        $this->arResult['STATUS']['IS_SAVE_BASKET']         = ($request->get('save_basket') == 'y');
+        $this->arResult['STATUS']['IS_BASKET_SHARING_AJAX'] = ($request->get('basket_sharing_ajax') == 'y');
+        $this->arResult['STATUS']['IS_APPLIED_CODE']        = ((int)$request->get('saved_basket_id') > 0);
+
         return $this;
     }
 
@@ -144,19 +148,12 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         try {
             $this->checkModules()->prepareResult();
 
-            $basket      = new Basket\Basket();
-            $basketValue = $basket->getItemsListFormat();
-
-            $this->arResult['STATUS']['IS_SAVE_BASKET']         = (Application::getInstance()->getContext()->getRequest()->get('save_basket')
-                                                                   == 'y');
-            $this->arResult['STATUS']['IS_BASKET_SHARING_AJAX'] = (Application::getInstance()->getContext()->getRequest()->get('basket_sharing_ajax')
-                                                                   == 'y');
-            $this->arResult['STATUS']['IS_APPLIED_CODE']        = ((int)Application::getInstance()->getContext()->getRequest()->get('saved_basket_id')
-                                                                   > 0);
-
             if ($this->isUseCaptcha()) {
                 $this->initializationCaptcha();
             }
+
+            $basket      = new Basket\Basket();
+            $basketValue = $basket->getItemsListFormat();
 
             /**
              * TODO: реализовать проверку существоания корзины прозрачным функционалом, а не хардкодом
