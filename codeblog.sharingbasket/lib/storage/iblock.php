@@ -275,7 +275,21 @@ class Iblock implements SaveAndRestore
 
         return $propertyList['CODEBLOG_BASKET_CODE'];
 
+    }
 
+    /**
+     * @param $basketId
+     * @param $baketCountOfUses
+     *
+     * @return void
+     */
+    protected static function increaseTheCountOfUses($basketId, $baketCountOfUses) {
+
+        $basketId            = (int)$basketId;
+        $baketCountOfUses    = (int)$baketCountOfUses;
+        $newBaketCountOfUses = $baketCountOfUses + 1;
+
+        \CIBlockElement::SetPropertyValuesEx($basketId, false, ['CODEBLOG_NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
 
     /**
@@ -285,15 +299,22 @@ class Iblock implements SaveAndRestore
      */
     public function restoreBasketItemsListFromStorage($basketId) {
 
-        $basketId              = (int)$basketId;
-        $select                = ['ID',
-                                  'PROPERTY_CODEBLOG_BASKET_VALUE'];
-        $filter                = ['IBLOCK_ID'            => self::getStorageId(),
-                                  'CODEBLOG_BASKET_CODE' => $basketId];
+        $basketId = (int)$basketId;
+        $select   = ['ID',
+                     'PROPERTY_CODEBLOG_BASKET_VALUE',
+                     'PROPERTY_CODEBLOG_NUMBER_OF_USES'];
+        $filter   = ['IBLOCK_ID'                     => self::getStorageId(),
+                     'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId];
+
         $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
 
         if ($item = $iBlockItemsCollection->Fetch()) {
-            $baketValue = $item['PROPERTY_CODEBLOG_BASKET_VALUE_VALUE'];
+
+            $baketValue             = $item['PROPERTY_CODEBLOG_BASKET_VALUE_VALUE'];
+            $baketCountOfUses       = $item['PROPERTY_CODEBLOG_NUMBER_OF_USES_VALUE'];
+            $baketElementIdInIblock = $item['ID'];
+
+            self::increaseTheCountOfUses($baketElementIdInIblock, $baketCountOfUses);
         }
 
         return $baketValue;

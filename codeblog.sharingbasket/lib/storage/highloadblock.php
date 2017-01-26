@@ -325,6 +325,25 @@ class Highloadblock implements SaveAndRestore
     }
 
 
+    /**
+     * @param $basketId
+     * @param $baketCountOfUses
+     *
+     * @return void
+     */
+    protected static function increaseTheCountOfUses($basketId, $baketCountOfUses) {
+
+        $basketId            = (int)$basketId;
+        $baketCountOfUses    = (int)$baketCountOfUses;
+        $newBaketCountOfUses = $baketCountOfUses + 1;
+
+        $filter['NAME'] = self::STORAGE_NAME;
+        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
+        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+
+        $dataClass::update($basketId, ['UF_NUMBER_OF_USES' => $newBaketCountOfUses]);
+    }
+
     public function restoreBasketItemsListFromStorage($basketId) {
 
         $basketId       = (int)$basketId;
@@ -332,10 +351,19 @@ class Highloadblock implements SaveAndRestore
         $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
         $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
 
-        $basketElement = $dataClass::getList(['select' => ['UF_BASKET_VALUE'],
+        $basketElement = $dataClass::getList(['select' => ['ID',
+                                                           'UF_BASKET_VALUE',
+                                                           'UF_NUMBER_OF_USES'],
                                               'filter' => ['UF_BASKET_CODE' => $basketId]]);
 
-        return $basketElement->fetch()['UF_BASKET_VALUE'];
+        $basket = $basketElement->fetch();
+
+        $baketCountOfUses        = $basket['UF_NUMBER_OF_USES'];
+        $baketElementIdInHlBlock = $basket['ID'];
+
+        self::increaseTheCountOfUses($baketElementIdInHlBlock, $baketCountOfUses);
+
+        return $basket['UF_BASKET_VALUE'];
 
     }
 
