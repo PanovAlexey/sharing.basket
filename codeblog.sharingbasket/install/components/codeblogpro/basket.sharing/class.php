@@ -11,6 +11,7 @@ use \Bitrix\Main\Application;
 use \Bitrix\Main\Web\Uri;
 use CodeBlog\SharingBasket\Basket;
 use CodeBlog\SharingBasket\Storage;
+use CodeBlog\SharingBasket\Captcha;
 
 \Bitrix\Main\Loader::includeModule('codeblog.sharingbasket');
 
@@ -21,10 +22,6 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
     protected $requiredModules = ['iblock',
                                   'sale'];
-
-    protected function isAjax() {
-        return isset($_REQUEST['ajax']) && $_REQUEST['ajax'] == 'y';
-    }
 
     protected function checkModules() {
         foreach ($this->requiredModules as $moduleName) {
@@ -37,10 +34,6 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         return $this;
     }
 
-    protected function getProductsListFromBasket() {
-
-    }
-
     /**
      * Event called from includeComponent before component execution.
      * Takes component parameters as argument and should return it formatted as needed.
@@ -50,6 +43,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
      * @return array[string]mixed
      */
     public function onPrepareComponentParams($params) {
+
         return $params;
     }
 
@@ -78,6 +72,70 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         return $this;
     }
 
+    /**
+     * @return bool
+     */
+    protected function isUseCaptcha() {
+
+        global $USER;
+
+        $isShowCaptcha = false;
+
+        if ($this->arParams['CAPTCHA_SHOW'] == 'Y') {
+            $isShowCaptcha = true;
+        }
+
+        if (($this->arParams['CAPTCHA_SHOW'] == 'S') && (!$USER->IsAuthorized())) {
+            $isShowCaptcha = true;
+        }
+
+        $this->arResult['CAPTCHA']['SHOW'] = $isShowCaptcha;
+
+        return $isShowCaptcha;
+    }
+
+    /**
+     * @return void
+     */
+    protected function initializationCaptcha() {
+
+        $this->arResult['CAPTCHA']['CODE']                          = Captcha\Helper::getCaptcha();
+        $this->arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME']  = Captcha\Helper::CAPTCHA_SID_NAME;
+        $this->arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME'] = Captcha\Helper::CAPTCHA_WORD_NAME;
+        $this->arResult['CAPTCHA']['FORM']['NAME']                  = Captcha\Helper::CAPTCHA_FORM_NAME;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidCaptcha() {
+
+        $request = Application::getInstance()->getContext()->getRequest();
+
+        $captchaWord = $request->getPost($this->arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME']);
+        $captchaCode = $request->getPost($this->arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME']);
+
+        $isValidCaptcha = Captcha\Helper::checkCaptcha($captchaWord, $captchaCode);
+
+        return $isValidCaptcha;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCaptchaVerify() {
+
+        if ($this->isUseCaptcha()) {
+
+            $isCaptchaVerify = (Captcha\Helper::isApplliedCaptcha() && $this->isValidCaptcha());
+
+        } else {
+            $isCaptchaVerify = true;
+        }
+
+        return $isCaptchaVerify;
+    }
+
 
     public function executeComponent() {
 
@@ -96,20 +154,27 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
             $this->arResult['STATUS']['IS_APPLIED_CODE']        = ((int)Application::getInstance()->getContext()->getRequest()->get('saved_basket_id')
                                                                    > 0);
 
+            if ($this->isUseCaptcha()) {
+                $this->initializationCaptcha();
+            }
+
             /**
              * TODO: реализовать проверку существоания корзины прозрачным функционалом, а не хардкодом
              */
-            $this->arResult['STATUS']['BASKET']['IS_EMPTY']     = $basketValue == '[]';
+            $this->arResult['STATUS']['BASKET']['IS_EMPTY'] = $basketValue == '[]';
 
             if ($this->arResult['STATUS']['IS_SAVE_BASKET']) {
 
                 $storage = Storage\StorageHelper::getStorage();
 
-                $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $userId = Fuser::getId());
-
                 $APPLICATION->restartBuffer();
 
-                echo $this->arResult['BASKET']['ID'];
+                if (!$this->isCaptchaVerify()) {
+                    echo('Попробуйте ввести капчу снова');
+                } else {
+                    $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $userId = Fuser::getId());
+                    echo $this->arResult['BASKET']['ID'];
+                }
                 exit();
             }
 
@@ -132,7 +197,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                         $basket->setBasketByItemsListFormat($basketItemsListFormat);
                         echo "<script>location.href = '" . $this->arResult['URL']['CLEAR'] . "';</script>";
                     } else {
-                        echo "error";
+                        echo 'Корзина с указанным кодом не найдена';
                     }
 
                     exit();
@@ -143,22 +208,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
             }
 
 
-            if ($this->isAjax()) {
-                $APPLICATION->restartBuffer();
-
-                die();
-            }
-
             $this->includeComponentTemplate();
         } catch (SystemException $e) {
-
-            if ($this->isAjax()) {
-
-                $APPLICATION->restartBuffer();
-                echo json_encode(['status' => 'error',
-                                  'data'   => $e->getMessage()], JSON_FORCE_OBJECT);
-                die();
-            }
 
             self::__showError($e->getMessage());
         }
