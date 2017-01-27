@@ -22,9 +22,8 @@ interface SaveAndRestore
 
     public function getStorageId();
 
-    public function saveBasketToStorage($basketValue, $userId);
+    public function saveBasketToStorage($basketValue, $basketHash = '', $userId);
 
     public function restoreBasketItemsListFromStorage($basketId);
-
 
 }

@@ -72,6 +72,29 @@ class Highloadblock implements SaveAndRestore
         $propertyDataList['BASKET_CODE']['SETTINGS']['HELP_MESSAGE']      = ['ru' => 'Пользовательское свойство Идентификационный код корзины',
                                                                              'en' => 'User field basket code'];
 
+        $propertyDataList['BASKET_HASH']['ENTITY_ID']                     = 'HLBLOCK_' . $highblockId;
+        $propertyDataList['BASKET_HASH']['FIELD_NAME']                    = 'UF_BASKET_HASH';
+        $propertyDataList['BASKET_HASH']['XML_ID']                        = 'XML_BASKET_HASH';
+        $propertyDataList['BASKET_HASH']['MULTIPLE']                      = 'N';
+        $propertyDataList['BASKET_HASH']['MANDATORY']                     = 'Y';
+        $propertyDataList['BASKET_HASH']['SHOW_FILTER']                   = 'N';
+        $propertyDataList['BASKET_HASH']['IS_SEARCHABLE']                 = 'N';
+        $propertyDataList['BASKET_HASH']['USER_TYPE_ID']                  = 'string';
+        $propertyDataList['BASKET_HASH']['SETTINGS']['DEFAULT_VALUE']     = '';
+        $propertyDataList['BASKET_HASH']['SETTINGS']['SIZE']              = '40';
+        $propertyDataList['BASKET_HASH']['SETTINGS']['ROWS']              = '1';
+        $propertyDataList['BASKET_HASH']['SETTINGS']['SHOW_IN_LIST']      = '';
+        $propertyDataList['BASKET_HASH']['SETTINGS']['EDIT_FORM_LABEL']   = ['ru' => 'Уникальный код корзины',
+                                                                             'en' => 'User field basket unique code',];
+        $propertyDataList['BASKET_HASH']['SETTINGS']['LIST_COLUMN_LABEL'] = ['ru' => 'Уникальный код корзины',
+                                                                             'en' => 'User field basket unique code',];
+        $propertyDataList['BASKET_HASH']['SETTINGS']['LIST_FILTER_LABEL'] = ['ru' => 'Пользовательское свойство уникальный код корзины',
+                                                                             'en' => 'User field  basket unique code'];
+        $propertyDataList['BASKET_HASH']['SETTINGS']['ERROR_MESSAGE']     = ['ru' => 'Ошибка при заполнении пользовательского свойства уникальный код корзины',
+                                                                             'en' => 'An error in completing the user field basket unique code'];
+        $propertyDataList['BASKET_HASH']['SETTINGS']['HELP_MESSAGE']      = ['ru' => 'Пользовательское свойство уникальный код корзины',
+                                                                             'en' => 'User field basket unique code'];
+
         $propertyDataList['BASKET_VALUE']['ENTITY_ID']                 = 'HLBLOCK_' . $highblockId;
         $propertyDataList['BASKET_VALUE']['FIELD_NAME']                = 'UF_BASKET_VALUE';
         $propertyDataList['BASKET_VALUE']['XML_ID']                    = 'XML_ID_BASKET_VALUE';
@@ -299,23 +322,54 @@ class Highloadblock implements SaveAndRestore
         return (bool)$this->getStorageId();
     }
 
+    protected function basketIsExistByHash($hash) {
+
+        $baketCode = 0;
+
+        if (!empty($hash)) {
+
+            $filter['NAME'] = self::STORAGE_NAME;
+            $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
+            $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+
+            $basketElement = $dataClass::getList(['select' => ['ID',
+                                                               'UF_BASKET_CODE'],
+                                                  'filter' => ['UF_BASKET_HASH' => $hash]]);
+
+            $basket = $basketElement->fetch();
+
+            if ($basket['ID'] > 0) {
+                $baketCode = $basket['UF_BASKET_CODE'];
+            }
+
+            return $baketCode;
+        }
+    }
+
     /**
      * @param     $basketValue
+     * @param     $basketHash
      * @param int $userId
      *
      * @return string
      */
-    public function saveBasketToStorage($basketValue, $userId = 0) {
+    public function saveBasketToStorage($basketValue, $basketHash = '', $userId = 0) {
 
         $filter['NAME'] = self::STORAGE_NAME;
 
-        $hlBlock = self::getHighloadBlockCollection($filter)->fetch();
-
+        $hlBlock   = self::getHighloadBlockCollection($filter)->fetch();
         $dataClass = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
 
         $timeCurrent = time();
 
+        $basketCode = $this->basketIsExistByHash($basketHash);
+
+        if (!empty($basketCode)) {
+            return $basketCode;
+        }
+
         $newStorageElement = $dataClass::add(['UF_BASKET_CODE'  => $timeCurrent,
+                                              'UF_BASKET_HASH'  => $basketHash,
                                               'UF_BASKET_VALUE' => $basketValue,
                                               'UF_USER_ID'      => $userId,
                                               'UF_BASKET_DATE'  => $timeCurrent]);

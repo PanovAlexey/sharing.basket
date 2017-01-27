@@ -19,7 +19,8 @@ use Bitrix\Currency\CurrencyManager;
 class Basket
 {
 
-    private $itemsList = [];
+    protected $itemsList  = [];
+    protected $basketHash = '';
 
     protected function push($productId, $quantity, $delay) {
 
@@ -36,17 +37,57 @@ class Basket
     }
 
     /**
-     * @return json
+     * @return void
      */
-    public function getItemsListFormat() {
+    protected function setItemsList() {
 
         $basketCollection = BasketTable::getList(['filter' => ['=FUSER_ID' => Fuser::getId(),
                                                                '=ORDER_ID' => null]]);
+
         while ($item = $basketCollection->fetch()) {
             $this->push($item['PRODUCT_ID'], $item['QUANTITY'], $item['DELAY']);
         }
 
-        return $this->itemsListToFormat($this->itemsList);
+        $this->basketHashCalculate();
+    }
+
+    protected function basketHashCalculate() {
+
+        $basketHash  = '';
+        $itemsIdList = [];
+
+        foreach ($this->itemsList as $itemId => $itemFields) {
+            $itemsIdList[] = $itemId;
+        }
+
+        unset($itemId);
+
+        foreach ($itemsIdList as $itemId) {
+            $basketHash .= $itemId;
+            foreach ($this->itemsList[$itemId] as $fieldValue) {
+                $basketHash .= $fieldValue;
+            }
+
+        }
+
+        $this->basketHash = $basketHash;
+
+    }
+
+    /**
+     * @return json
+     */
+    public function getItemsListFormat($getBasketHash = false) {
+
+        $this->setItemsList();
+
+        if ($getBasketHash) {
+            return ['ITEMS_LIST_FORMAT' => $this->itemsListToFormat($this->itemsList),
+                    'BASKET_HASH'       => $this->basketHash];
+        } else {
+            return $this->itemsListToFormat($this->itemsList);
+        }
+
     }
 
     //@TODO: реализовать проверку на существование товара
@@ -98,13 +139,6 @@ class Basket
 
     private function itemsListUnFormat($itemsListFormated) {
         return json_decode($itemsListFormated, JSON_OBJECT_AS_ARRAY);
-    }
-
-    /**
-     * @param array $itemsList
-     */
-    public function setItemsList(array $itemsList) {
-        $this->itemsList = $itemsList;
     }
 
 }

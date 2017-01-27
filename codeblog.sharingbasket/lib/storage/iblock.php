@@ -126,6 +126,16 @@ class Iblock implements SaveAndRestore
         $propertyDataList['BASKET_CODE']['XML_ID']        = 'XML_BASKET_CODE';
         $propertyDataList['BASKET_CODE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
+        $propertyDataList['BASKET_HASH']['IBLOCK_ID']     = $iBlockId;
+        $propertyDataList['BASKET_HASH']['NAME']          = 'Уникальный ключ корзины';
+        $propertyDataList['BASKET_HASH']['CODE']          = 'CODEBLOG_BASKET_HASH';
+        $propertyDataList['BASKET_HASH']['DEFAULT_VALUE'] = '';
+        $propertyDataList['BASKET_HASH']['PROPERTY_TYPE'] = 'S';
+        $propertyDataList['BASKET_HASH']['ROW_COUNT']     = 1;
+        $propertyDataList['BASKET_HASH']['COL_COUNT']     = 40;
+        $propertyDataList['BASKET_HASH']['XML_ID']        = 'XML_BASKET_HASH';
+        $propertyDataList['BASKET_HASH']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
+
         $propertyDataList['BASKET_VALUE']['IBLOCK_ID']     = $iBlockId;
         $propertyDataList['BASKET_VALUE']['NAME']          = 'Содержимое  корзины';
         $propertyDataList['BASKET_VALUE']['CODE']          = 'CODEBLOG_BASKET_VALUE';
@@ -237,13 +247,36 @@ class Iblock implements SaveAndRestore
         return (bool)$this->getStorageId();
     }
 
+    protected function basketIsExistByHash($hash) {
+
+        $baketCode = 0;
+
+        $select = ['ID',
+                   'PROPERTY_CODEBLOG_BASKET_CODE',
+                   'PROPERTY_CODEBLOG_BASKET_HASH'];
+        $filter = ['IBLOCK_ID'                     => self::getStorageId(),
+                   'PROPERTY_CODEBLOG_BASKET_HASH' => $hash];
+
+        if (!empty($hash)) {
+
+            $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
+
+            if ($item = $iBlockItemsCollection->Fetch()) {
+                $baketCode = $item['PROPERTY_CODEBLOG_BASKET_CODE_VALUE'];
+            }
+
+            return $baketCode;
+        }
+    }
+
     /**
      * @param     $basketValue
+     * @param     $basketHash
      * @param int $userId
      *
      * @return string
      */
-    public function saveBasketToStorage($basketValue, $userId = 0) {
+    public function saveBasketToStorage($basketValue, $basketHash = '', $userId = 0) {
 
         global $USER;
 
@@ -252,9 +285,11 @@ class Iblock implements SaveAndRestore
         $iBlockElement = new \CIBlockElement;
 
         $timeCurrent = time();
+        $basketHash  = trim($basketHash);
 
         $propertyList                          = [];
         $propertyList['CODEBLOG_BASKET_CODE']  = $timeCurrent;
+        $propertyList['CODEBLOG_BASKET_HASH']  = $basketHash;
         $propertyList['CODEBLOG_BASKET_VALUE'] = $basketValue;
         $propertyList['CODEBLOG_USER_ID']      = $userId;
         $propertyList['CODEBLOG_BASKET_DATE']  = $timeCurrent;
@@ -265,6 +300,12 @@ class Iblock implements SaveAndRestore
                                'PROPERTY_VALUES'   => $propertyList,
                                'NAME'              => 'Корзина ' . date('Y m d G:i:s'),
                                'ACTIVE'            => 'Y'];
+
+        $basketCode = $this->basketIsExistByHash($basketHash);
+
+        if (!empty($basketCode)) {
+            return $basketCode;
+        }
 
         if (!$iBlockElementId = $iBlockElement->Add($arLoadProductArray)) {
             /**

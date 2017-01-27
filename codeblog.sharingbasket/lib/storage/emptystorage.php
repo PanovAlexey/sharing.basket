@@ -35,7 +35,7 @@ class EmptyStorage implements SaveAndRestore
         return false;
     }
 
-    public function saveBasketToStorage($basketValue = '', $userId = '') {
+    public function saveBasketToStorage($basketValue = '', $basketHash = '', $userId = '') {
         return false;
     }
 

@@ -34,7 +34,6 @@ use Bitrix\Main\Localization\Loc;
 
         <a href="#" id="codeblog_basket_save_basket">Сохранить корзину</a>
 
-
     <? } ?>
 </div>
 

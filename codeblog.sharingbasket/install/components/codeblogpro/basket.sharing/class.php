@@ -152,8 +152,10 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 $this->initializationCaptcha();
             }
 
-            $basket      = new Basket\Basket();
-            $basketValue = $basket->getItemsListFormat();
+            $basket       = new Basket\Basket();
+            $basketFields = $basket->getItemsListFormat($getBasketHash = true);
+            $basketValue  = $basketFields['ITEMS_LIST_FORMAT'];
+            $basketHash   = $basketFields['BASKET_HASH'];
 
             /**
              * TODO: реализовать проверку существоания корзины прозрачным функционалом, а не хардкодом
@@ -169,8 +171,10 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 if (!$this->isCaptchaVerify()) {
                     echo('Попробуйте ввести капчу снова');
                 } else {
-                    $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $userId = Fuser::getId());
+
+                    $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $basketHash, $userId = Fuser::getId());
                     echo $this->arResult['BASKET']['ID'];
+
                 }
                 exit();
             }
@@ -187,6 +191,11 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 $storage = Storage\StorageHelper::getStorage();
 
                 if ($storage->isStorageExist($savedBasketId)) {
+
+                    if (empty($savedBasketId)) {
+                        echo 'Корзина с указанным кодом не найдена';
+                        exit();
+                    }
 
                     $basketItemsListFormat = $storage->restoreBasketItemsListFromStorage($savedBasketId);
 
