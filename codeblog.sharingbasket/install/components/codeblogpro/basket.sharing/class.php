@@ -157,10 +157,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
             $basketValue  = $basketFields['ITEMS_LIST_FORMAT'];
             $basketHash   = $basketFields['BASKET_HASH'];
 
-            /**
-             * TODO: реализовать проверку существоания корзины прозрачным функционалом, а не хардкодом
-             */
-            $this->arResult['STATUS']['BASKET']['IS_EMPTY'] = $basketValue == '[]';
+            $this->arResult['STATUS']['BASKET']['IS_EMPTY'] = $basket->isEmpty();
 
             if ($this->arResult['STATUS']['IS_SAVE_BASKET']) {
 

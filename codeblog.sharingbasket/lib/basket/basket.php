@@ -37,6 +37,13 @@ class Basket
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty() {
+        return (empty($this->itemsList));
+    }
+
+    /**
      * @return void
      */
     protected function setItemsList() {
@@ -90,14 +97,25 @@ class Basket
 
     }
 
-    //@TODO: реализовать проверку на существование товара
+    /**
+     * @param $itemId
+     *
+     * @return int
+     */
     public function isProductExist($itemId) {
-        return true;
-    }
 
-    //@TODO: реализовать проверку на наличие товара на складе
-    public function isProductInStock($itemId) {
-        return true;
+        $itemId = (int)$itemId;
+
+        if ($itemId == 0) {
+            return false;
+        }
+
+        $select = ['*'];
+        $filter = ['ID' => $itemId];
+
+        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
+
+        return $iBlockItemsCollection->Fetch()['ID'] > 0;
     }
 
     /**
@@ -114,13 +132,15 @@ class Basket
 
         foreach ($itemsList as $itemId => $itemFields) {
 
-            if ($this->isProductExist($itemId) && $this->isProductInStock($itemId)) {
+            if ($this->isProductExist($itemId)) {
+
                 $item = $basket->createItem('catalog', $itemId);
                 $item->setFields(['QUANTITY'               => $itemFields['QUANTITY'],
                                   'DELAY'                  => $itemFields['DELAY'],
                                   'CURRENCY'               => CurrencyManager::getBaseCurrency(),
                                   'LID'                    => Context::getCurrent()->getSite(),
                                   'PRODUCT_PROVIDER_CLASS' => 'CCatalogProductProvider']);
+
             }
 
         }
