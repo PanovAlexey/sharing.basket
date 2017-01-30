@@ -3,16 +3,13 @@
 define(ADMIN_MODULE_NAME, 'codeblog.sharingbasket');
 define(ADMIN_MODULE_ICON, '');
 
-// подключим все необходимые файлы:
-require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_admin_before.php'); // первый общий пролог
+require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_admin_before.php');
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/subscribe/include.php'); // инициализация модуля
-require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/subscribe/prolog.php'); // пролог модуля
+require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/subscribe/include.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/subscribe/prolog.php');
 
-// подключим языковой файл
 IncludeModuleLangFile(__FILE__);
 
-// получим права доступа текущего пользователя на модуль
 $POST_RIGHT = $APPLICATION->GetGroupRight('codeblog.sharingbasket');
 // если нет прав - отправим к форме авторизации с сообщением об ошибке
 if ($POST_RIGHT == 'D') {

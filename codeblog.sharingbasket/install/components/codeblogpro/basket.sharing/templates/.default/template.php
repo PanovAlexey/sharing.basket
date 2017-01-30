@@ -5,7 +5,6 @@
 use Bitrix\Main\Localization\Loc;
 
 ?>
-
 <div id="codeblog_basket_notification">
 
 </div>

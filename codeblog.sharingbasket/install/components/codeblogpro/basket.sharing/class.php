@@ -166,7 +166,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 $APPLICATION->restartBuffer();
 
                 if (!$this->isCaptchaVerify()) {
-                    echo('Попробуйте ввести капчу снова');
+                    echo(Loc::getMessage('COMPONENT_BASKET_SHARING_CAPTCHA_ERROR_MESSAGE'));
                 } else {
 
                     $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $basketHash, $userId = Fuser::getId());
@@ -175,7 +175,6 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 }
                 exit();
             }
-
 
             if ($this->arResult['STATUS']['IS_APPLIED_CODE']) {
 
@@ -190,7 +189,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 if ($storage->isStorageExist($savedBasketId)) {
 
                     if (empty($savedBasketId)) {
-                        echo 'Корзина с указанным кодом не найдена';
+                        echo Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_NOT_FOUND_ERROR_MESSAGE');
                         exit();
                     }
 
@@ -200,13 +199,13 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                         $basket->setBasketByItemsListFormat($basketItemsListFormat);
                         echo "<script>location.href = '" . $this->arResult['URL']['CLEAR'] . "';</script>";
                     } else {
-                        echo 'Корзина с указанным кодом не найдена';
+                        echo Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_NOT_FOUND_ERROR_MESSAGE');
                     }
 
                     exit();
                 }
 
-                echo('Некорректный код');
+                echo(Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE'));
                 exit();
             }
 
