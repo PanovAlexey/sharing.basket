@@ -10,8 +10,8 @@ $currentPHPVersion       = explode('.', PHP_VERSION);
 $currentPHPVersionNumber = (float)($currentPHPVersion[0] . '.' . $currentPHPVersion[1]);
 
 if ($currentPHPVersionNumber < 5.4) {
-    ShowMessage('Р’Р°С€Р° РІРµСЂСЃРёСЏ PHP ' . $currentPHPVersionNumber);
-    ShowMessage('Р’РЅРёРјР°РЅРёРµ! Р”Р»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ СѓСЃС‚Р°РЅРѕРІРєРё РјРѕРґСѓР»СЏ РѕР±РЅРѕРІРёС‚Рµ РІРµСЂСЃРёСЋ PHP РґРѕ 5.4 РёР»Рё Р±РѕР»РµРµ РїРѕР·РґРЅРµР№ РІРµСЂСЃРёРё.');
+    ShowMessage('Ваша версия PHP ' . $currentPHPVersionNumber);
+    ShowMessage('Внимание! Для продолжения установки модуля обновите версию PHP до 5.4 или более поздней версии.');
 
     return;
 }
@@ -21,11 +21,11 @@ if ($currentPHPVersionNumber < 5.4) {
 
     <?= bitrix_sessid_post() ?>
 
-    <h3>Р’С‹Р±РµСЂРёС‚Рµ С‚РёРї С…СЂР°РЅРёР»РёС‰Р° РґР»СЏ РєРѕСЂР·РёРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№</h3>
+    <h3>Выберите тип хранилища для корзин пользователей</h3>
     <br>
-    <input type="radio" name="typestorage" value="iblock">РРЅС„РѕР±Р»РѕРє<br>
-    <input type="radio" name="typestorage" value="highloadblock" checked>Bitrix РҐР°Р№Р»РѕР°РґР‘Р»РѕРє<br>
-    <input type="radio" name="typestorage" value="mysql" disabled>РћС‚РґРµР»СЊРЅР°СЏ С‚Р°Р±Р»РёС†Р° РІ MySQL<br>
+    <input type="radio" name="typestorage" value="iblock">Инфоблок<br>
+    <input type="radio" name="typestorage" value="highloadblock" checked>Bitrix ХайлоадБлок<br>
+    <input type="radio" name="typestorage" value="mysql" disabled>Отдельная таблица в MySQL<br>
     <input type="radio" name="typestorage" value="reddis" disabled>Reddis<br>
     <input type="radio" name="typestorage" value="mongodb" disabled>MongoDB<br>
     <input type="radio" name="typestorage" value="riak" disabled>Riak<br>
@@ -36,5 +36,5 @@ if ($currentPHPVersionNumber < 5.4) {
     <input type="hidden" name="lang" value="<?= LANG ?>">
     <input type="hidden" name="step" value="2">
     <br>
-    <input type="submit" name="submit" value="РџРѕРґС‚РІРµСЂРґРёС‚СЊ">
+    <input type="submit" name="submit" value="Подтвердить">
 </form>
