@@ -2,5 +2,5 @@
     die();
 }
 
-$MESS['COMPONENT_BASKET_SHARING_NO_MODULE']     = 'РњРѕРґСѓР»СЊ "#MODULE#" РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ.';
-$MESS['COMPONENT_BASKET_SHARING_ERROR_MESSAGE'] = 'РћС€РёР±РєР°';
+$MESS['COMPONENT_BASKET_SHARING_NO_MODULE']     = 'Модуль "#MODULE#" не установлен.';
+$MESS['COMPONENT_BASKET_SHARING_ERROR_MESSAGE'] = 'Ошибка';

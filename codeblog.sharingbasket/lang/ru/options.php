@@ -1,3 +1,3 @@
 <?
-$MESS['CODEBLOG_SHARING_BASKET_OPT']  = 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸';
-$MESS['CODEBLOG_SHARING_BASKET_NULL'] = 'ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð¾Ð¿Ñ†Ð¸Ð¸';
+$MESS['CODEBLOG_SHARING_BASKET_OPT']  = 'Íàñòðîéêè';
+$MESS['CODEBLOG_SHARING_BASKET_NULL'] = 'Ïðèìåð îïöèè';

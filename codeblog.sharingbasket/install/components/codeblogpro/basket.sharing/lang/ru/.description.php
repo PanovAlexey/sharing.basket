@@ -2,6 +2,6 @@
     die();
 }
 
-$MESS['COMPONENT_BASKET_SHARING_NAME']               = 'РЎРѕС…СЂР°РЅРµРЅРёРµ/РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РєРѕСЂР·РёРЅС‹';
-$MESS['COMPONENT_BASKET_SHARING_DESCRIPTION']        = 'РљРѕРјРїРѕРЅРµРЅС‚ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ/РїРµСЂРµРґР°С‡Рё/РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёСЏ РєРѕСЂР·РёРЅС‹';
-$MESS['COMPONENT_BASKET_SHARING_TYPE_CONTENT_VALUE'] = 'Р Р°Р±РѕС‚Р° СЃ РєРѕСЂР·РёРЅРѕР№';
+$MESS['COMPONENT_BASKET_SHARING_NAME']               = 'Сохранение/восстановление корзины';
+$MESS['COMPONENT_BASKET_SHARING_DESCRIPTION']        = 'Компонент для сохранения/передачи/восстановления корзины';
+$MESS['COMPONENT_BASKET_SHARING_TYPE_CONTENT_VALUE'] = 'Работа с корзиной';
