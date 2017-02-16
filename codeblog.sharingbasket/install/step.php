@@ -25,7 +25,7 @@ if ($currentPHPVersionNumber < 5.4) {
     <br>
     <input type="radio" name="typestorage" value="iblock">Инфоблок<br>
     <input type="radio" name="typestorage" value="highloadblock" checked>Bitrix ХайлоадБлок<br>
-    <input type="radio" name="typestorage" value="mysql" disabled>Отдельная таблица в MySQL<br>
+    <input type="radio" name="typestorage" value="mysql">Отдельная таблица в MySQL<br>
     <input type="radio" name="typestorage" value="reddis" disabled>Reddis<br>
     <input type="radio" name="typestorage" value="mongodb" disabled>MongoDB<br>
     <input type="radio" name="typestorage" value="riak" disabled>Riak<br>

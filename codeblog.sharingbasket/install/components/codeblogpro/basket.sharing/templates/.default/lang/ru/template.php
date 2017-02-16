@@ -2,17 +2,17 @@
     die();
 }
 
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_IS_SAVED_BASKET_VALUE']   = 'РЈ РІР°СЃ РµСЃС‚СЊ СЃРѕС…СЂР°РЅРµРЅРЅР°СЏ РєРѕСЂР·РёРЅР°? РҐРѕС‚РёС‚Рµ РІРІРµСЃС‚Рё РЅРѕРјРµСЂ?';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_IS_WANT_SAVE_VALUE']      = 'РќРµС‚, С…РѕС‡Сѓ СЃРѕС…СЂР°РЅРёС‚СЊ СЌС‚Сѓ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_VALUE']        = 'Р”Р°, РІРІРµСЃС‚Рё РЅРѕРјРµСЂ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_TO_SAVE_VALUE']           = 'РЎРѕС…СЂР°РЅРёС‚СЊ РєРѕСЂР·РёРЅСѓ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_SAVED_SUCCESSFUL_VALUE']  = 'РљРѕСЂР·РёРЅР° СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅР° РїРѕРґ РЅРѕРјРµСЂРѕРј';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_CODE_VALUE']         = 'РћС‚РїСЂР°РІРёС‚СЊ РєРѕРґ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_TO_VALUE']                = 'РЅР°';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_PHONE_VALUE']             = 'С‚РµР»РµС„РѕРЅ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_NEED_AUTH_VALUE']         = 'РќРµРѕР±С…РѕРґРёРјР° Р°РІС‚РѕСЂРёР·Р°С†РёСЏ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_PRINT_VALUE']             = 'Р Р°СЃРїРµС‡Р°С‚Р°С‚СЊ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE']       = 'РћС‚РїСЂР°РІРёС‚СЊ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_CODE_VALUE']  = 'РћС‚РїСЂР°РІРёС‚СЊ РєРѕРґ';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE'] = 'Р’РІРµРґРёС‚Рµ РєРѕРґ СЃРѕС…СЂР°РЅРµРЅРЅРѕР№ РєРѕСЂР·РёРЅС‹.
-        Р’РЅРёРјР°РЅРёРµ, РµСЃР»Рё СЃРµР№С‡Р°СЃ РІ РєРѕСЂР·РёРЅРµ РµСЃС‚СЊ С‚РѕРІР°СЂС‹, РѕРЅРё Р±СѓРґСѓС‚ Р·Р°РјРµРЅРµРЅС‹';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_IS_SAVED_BASKET_VALUE']   = 'У вас есть сохраненная корзина? Хотите ввести номер?';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_IS_WANT_SAVE_VALUE']      = 'Нет, хочу сохранить эту';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_VALUE']        = 'Да, ввести номер';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_TO_SAVE_VALUE']           = 'Сохранить корзину';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_SAVED_SUCCESSFUL_VALUE']  = 'Корзина успешно сохранена под номером';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_CODE_VALUE']         = 'Отправить код';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_TO_VALUE']                = 'на';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_PHONE_VALUE']             = 'телефон';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_NEED_AUTH_VALUE']         = 'Необходима авторизация';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_PRINT_VALUE']             = 'Распечатать';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE']       = 'Отправить';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_CODE_VALUE']  = 'Отправить код';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE'] = 'Введите код сохраненной корзины.
+        Внимание, если сейчас в корзине есть товары, они будут заменены';
