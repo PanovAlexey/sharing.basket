@@ -26,7 +26,7 @@ class Mysql implements SaveAndRestore
 
         $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        $pdo->exec("DROP TABLE codeblog_sharing_basket");
+        $pdo->exec("DROP TABLE " . Connection::STORAGE_CODE);
     }
 
 
@@ -89,16 +89,33 @@ class Mysql implements SaveAndRestore
     }
 
 
+    /**
+     * @ToDo
+     *
+     * @param $hash
+     *
+     * @return int
+     */
     protected function basketIsExistByHash($hash)
     {
+        $hash = htmlspecialchars($hash);
 
-        $baketCode = 0;
+        $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        return $baketCode;
+        if (!empty($hash)) {
+
+            $filter = ['basket_hash' => $hash];
+            $select = ['basket_code'];
+
+            $basketElementsListInStorage = Storage\Mysql\Helper::getList($pdo, $select, $filter);
+
+            return $basketElementsListInStorage[0]['basket_code'];
+        }
     }
 
 
     /**
+     *
      * @param     $basketValue
      * @param     $basketHash
      * @param int $userId
@@ -108,16 +125,32 @@ class Mysql implements SaveAndRestore
     public function saveBasketToStorage($basketValue, $basketHash = '', $userId = 0)
     {
 
-        global $USER;
+        $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        $iBlockId = $this->getStorageId();
+        $timeCurrent = time();
 
+        $basketCode = $this->basketIsExistByHash($basketHash);
 
-        //return $propertyList['CODEBLOG_BASKET_CODE'];
+        if (!empty($basketCode)) {
+            return $basketCode;
+        }
+
+        $elementFields = [
+            'basket_code'  => $timeCurrent,
+            'basket_hash'  => $basketHash,
+            'basket_value' => $basketValue,
+            'user_id'      => $userId,
+            'basket_date'  => $timeCurrent
+        ];
+
+        $element = Storage\Mysql\Helper::add($pdo, $elementFields);
+
+        return $element['basket_code'];
 
     }
 
     /**
+     *
      * @param $basketId
      * @param $baketCountOfUses
      *
@@ -126,13 +159,16 @@ class Mysql implements SaveAndRestore
     protected static function increaseTheCountOfUses($basketId, $baketCountOfUses)
     {
 
-        $basketId            = (int)$basketId;
-        $baketCountOfUses    = (int)$baketCountOfUses;
-        $newBaketCountOfUses = $baketCountOfUses + 1;
+        $pdo = Storage\Mysql\Pdo::getDataBase();
 
+        $basketId            = (int)$basketId;
+        $newBaketCountOfUses = (int)$baketCountOfUses + 1;
+
+        Storage\Mysql\Helper::update($pdo, $basketId, ['NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
 
     /**
+     *
      * @param $basketId
      *
      * @return string
@@ -141,9 +177,13 @@ class Mysql implements SaveAndRestore
     {
 
         $basketId = (int)$basketId;
+        $pdo = Storage\Mysql\Pdo::getDataBase();
 
+        $basket = Storage\Mysql\Helper::getList($pdo,$select=['id','basket_code','basket_value','NUMBER_OF_USES'],$filter=['basket_code'=>$basketId]);
 
-        //return $baketValue;
+        self::increaseTheCountOfUses( $basket[0]['id'], $basket[0]['UF_NUMBER_OF_USES']);
+
+        return $basket[0]['basket_value'];
 
     }
 
