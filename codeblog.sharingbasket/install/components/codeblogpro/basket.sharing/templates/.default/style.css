@@ -1,11 +1,164 @@
-#codeblog_basket_saving_completed {
-    display: none;
-}
-
 #codeblog_basket_showing_enter_code {
     display: none;
 }
 
-#codeblog_basket_notification {
+#basket-sharing-title {
+    margin: 10px 0;
+    text-align: center;
+    color: #919191;
+    /*font-size: 16px;*/
+}
 
+.send-choice {
+    font-weight: bold;
+}
+
+#enter_code_show {
+    float: left;
+}
+
+#codeblog_basket_save_basket {
+    float: right;
+}
+
+.save-basket-text {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+
+}
+
+#save-basket-number {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.basket-sharing-answer-link {
+    line-height: 1.3;
+    color: #f2f2f2;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 2px solid #919191;
+    text-align: center;
+    background-color: #606060;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.09));
+    border: medium none;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: inset 0 1px 2px 0 #3e3e3e;
+    text-shadow: 0 1px 0 #505050;
+    padding: 8px 15px;
+}
+
+.basket-sharing-answer-link:hover {
+    background: 0;
+    color: #919191;
+}
+
+#codeblog-basket-answer {
+    margin: 5px 30px 20px 30px;
+}
+
+#codeblog-basket-captcha-form {
+    margin: 0 auto;
+    display: block;
+    width: 180px;
+}
+
+#codeblog_basket_saving_completed {
+    display: none;
+}
+
+#codeblog_basket_notification {
+    border: 1px solid #c9c9c9;
+    border-radius: 3px;
+    padding: 20px 10px 20px 25px;
+    background: #eaeaeb;
+    width: 300px;
+    margin: 10px auto;
+    display: none;
+    position: fixed;
+    top: 20%;
+    left: 45%;
+    z-index: 1000;
+    border: 1px solid #c9c9c9;
+}
+
+.codeblog-basket-captcha-container {
+    width: 280px;
+    margin: 5px auto;
+    display: none;
+}
+
+.codeblog-basket-captcha-container img {
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.codeblog-basket-captcha-container input {
+    width: 100%;
+}
+
+.codeblog-basket-captcha-container .btn-captcha {
+    cursor: pointer;
+    text-align: center;
+    background: #70bb18;
+    border: 0;
+    color: #fff;
+    font-size: 13px;
+    position: relative;
+    text-transform: uppercase;
+    border-radius: 2px;
+    line-height: 30px;
+    height: 40px;
+    padding: 5px 0px;
+    width: 100%;
+    vertical-align: middle;
+    outline: 0;
+    transition: width 5s linear;
+}
+
+.codeblog-basket-captcha-container .btn-captcha:hover {
+    background: #7ec629;
+}
+
+.codeblog-basket-close-icon {
+    background: url(/bitrix/js/main/core/css/../images/controls-sprite.png?2) no-repeat -3px -122px;
+    cursor: pointer;
+    height: 27px;
+    outline: 0;
+    opacity: .45;
+    float: right;
+    right: 0;
+    top: 0;
+    width: 27px;
+    transition: opacity .2s linear;
+}
+
+.js-save-basket-form .basket-form-control input {
+    width: 233px;
+    border: none;
+    box-shadow: inset 0 1px 2px 0 #3e3e3e;
+    padding: 13px 20px;
+    line-height: 1.2;
+    color: #555;
+    outline: none;
+    margin-top: 3px;
+}
+
+.js-save-basket-form .basket-form-control input[type='submit'], .js-save-basket-form .basket-form-control input[type='button'] {
+    background-color: #606060;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.09));
+    border: medium none;
+    box-shadow: inset 0 1px 2px 0 #3e3e3e;
+    color: #f2f2f2;
+    text-shadow: 0 1px 0 #505050;
+}
+
+.js-save-basket-form .basket-form-control label {
+    font-weight: normal;
+    margin-top: 5px;
 }

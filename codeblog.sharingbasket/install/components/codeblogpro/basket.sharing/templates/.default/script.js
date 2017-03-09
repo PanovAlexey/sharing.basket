@@ -25,19 +25,29 @@ $(document).ready(function () {
 
     $("#enter_code_show").click(function () {
         $("#codeblog_basket_showing_enter_code").fadeIn();
-        $("#codeblog_basket_answer").hide();
+        $("#codeblog-basket-answer").hide();
 
         return false;
     });
-
+    $(".codeblog-basket-close-icon").click(function () {
+        $(this).parents('#codeblog_basket_notification').fadeOut();
+    });
 
     $("#codeblog_basket_save_basket").click(function () {
+        $('#codeblog_basket_notification').fadeIn();
+        $('.codeblog-basket-captcha-container').fadeIn();
+
+        return false;
+
+    });
+
+    $(".js-class-codeblog-basket-save").click(function () {
 
         var data = "save_basket=y" + "&basket_sharing_ajax=y";
 
-        if (captchaIsShow=='true') {
-            data = data + "&"+captchaSidName+"="+$("input[name='"+captchaSidName+"']").val();
-            data = data + "&"+captchaWordName+"="+$("input[name='"+captchaWordName+"']").val();
+        if (captchaIsShow == 'true') {
+            data = data + "&" + captchaSidName + "=" + $("input[name='" + captchaSidName + "']").val() + "&" +
+                captchaWordName + "=" + $("input[name='" + captchaWordName + "']").val();
         }
 
         $.ajax({
@@ -45,12 +55,14 @@ $(document).ready(function () {
             url: window.location.href,
             data: data,
             success: function (responseMessage) {
-                if (typeof(responseMessage) == "number") {
-                    $("#codeblog_basket_saving_completed #save-basket-number").html(responseMessage);
-                    $("#codeblog_basket_saving_completed").fadeIn();
-                    $("#codeblog_basket_answer").hide();
+                if (responseMessage * 1 > 0) {
+                    $("#codeblog_basket_notification #save-basket-number").html(responseMessage);
+                    $('.codeblog-basket-captcha-container').fadeOut();
+                    $('#codeblog_basket_saving_completed').fadeIn();
+
+                    $("#codeblog-basket-answer").hide();
                 }
-                else{
+                else {
                     $("#codeblog_basket_notification").html(responseMessage);
                 }
 
