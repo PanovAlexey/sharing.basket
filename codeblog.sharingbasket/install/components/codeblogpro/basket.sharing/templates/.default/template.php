@@ -10,7 +10,7 @@ use Bitrix\Main\Localization\Loc;
     <? if ($arResult['CAPTCHA']['SHOW']) { ?>
         <div style="clear: both"></div>
         <div class="codeblog-basket-captcha-container">
-            <div class="bx-block-title">Р’РІРµРґРёС‚Рµ СЃР»РѕРІРѕ</div>
+            <div class="bx-block-title">Введите слово</div>
             <div class="bx-subscribe">
                 <form id="codeblog-basket-captcha-form" name="<?= $arResult['CAPTCHA']['FORM']['NAME'] ?>"
                       method="post">
@@ -21,9 +21,9 @@ use Bitrix\Main\Localization\Loc;
                     <div class="bx-input-group">
                         <input class="bx-form-control"
                                name="<?= $arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME'] ?>" value=""
-                               title="Р’РІРµРґРёС‚Рµ РєРѕРґ СЃ РєР°СЂС‚РёРЅРєРё" placeholder="Р’РІРµРґРёС‚Рµ РєРѕРґ СЃ РєР°СЂС‚РёРЅРєРё" type="text">
+                               title="Введите код с картинки" placeholder="Введите код с картинки" type="text">
                     </div>
-                    <button class="sender-btn btn-captcha js-class-codeblog-basket-save">РџРѕРґС‚РІРµСЂРґРёС‚СЊ</button>
+                    <button class="sender-btn btn-captcha js-class-codeblog-basket-save">Подтвердить</button>
                 </form>
             </div>
         </div>
@@ -38,7 +38,7 @@ use Bitrix\Main\Localization\Loc;
             <?= bitrix_sessid_post() ?>
             <div class="basket-form-control">
                 <label for="name"><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_TO_VALUE') ?> e-mail</label>
-                <input class="js-email" name="email"
+                <input class="js-basket-send-email" name="email"
                        id="email"
                        placeholder="mymail@mail.com"
                        type="text">
@@ -47,7 +47,7 @@ use Bitrix\Main\Localization\Loc;
                 <label
                     for="name"><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_TO_VALUE') ?>
                     <?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_PHONE_VALUE') ?></label>
-                <input class="js-phone" name="phone"
+                <input class="js-basket-send-phone" name="phone"
                        id="phone"
                        placeholder="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_NEED_AUTH_VALUE') ?>"
                        type="text">

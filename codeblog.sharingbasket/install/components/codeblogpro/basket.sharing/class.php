@@ -20,14 +20,19 @@ CJSCore::Init('jquery');
 class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 {
 
-    protected $requiredModules = ['iblock',
-                                  'sale'];
+    protected $requiredModules = [
+        'iblock',
+        'sale'
+    ];
 
-    protected function checkModules() {
+    protected function checkModules()
+    {
         foreach ($this->requiredModules as $moduleName) {
             if (!Loader::includeModule($moduleName)) {
-                throw new SystemException(Loc::getMessage('COMPONENT_BASKET_SHARING_NO_MODULE', ['#MODULE#',
-                                                                                                 $moduleName]));
+                throw new SystemException(Loc::getMessage('COMPONENT_BASKET_SHARING_NO_MODULE', [
+                    '#MODULE#',
+                    $moduleName
+                ]));
             }
         }
 
@@ -42,7 +47,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
      *
      * @return array[string]mixed
      */
-    public function onPrepareComponentParams($params) {
+    public function onPrepareComponentParams($params)
+    {
 
         return $params;
     }
@@ -53,12 +59,14 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
      *
      * @return void
      */
-    public function onIncludeComponentLang() {
+    public function onIncludeComponentLang()
+    {
         $this->includeComponentLang(basename(__FILE__));
         Loc::loadMessages(__FILE__);
     }
 
-    protected function prepareResult() {
+    protected function prepareResult()
+    {
 
         $request = Application::getInstance()->getContext()->getRequest();
 
@@ -72,6 +80,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         $this->arResult['STATUS']['IS_SAVE_BASKET']         = ($request->get('save_basket') == 'y');
         $this->arResult['STATUS']['IS_BASKET_SHARING_AJAX'] = ($request->get('basket_sharing_ajax') == 'y');
         $this->arResult['STATUS']['IS_APPLIED_CODE']        = ((int)$request->get('saved_basket_id') > 0);
+        $this->arResult['STATUS']['IS_SEND_BASKET_INFO']    = ($request->get('send_basket') == 'y');
 
         return $this;
     }
@@ -79,7 +88,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
     /**
      * @return bool
      */
-    protected function isUseCaptcha() {
+    protected function isUseCaptcha()
+    {
 
         global $USER;
 
@@ -101,7 +111,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
     /**
      * @return void
      */
-    protected function initializationCaptcha() {
+    protected function initializationCaptcha()
+    {
 
         $this->arResult['CAPTCHA']['CODE']                          = Captcha\Helper::getCaptcha();
         $this->arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME']  = Captcha\Helper::CAPTCHA_SID_NAME;
@@ -112,7 +123,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
     /**
      * @return bool
      */
-    public function isValidCaptcha() {
+    public function isValidCaptcha()
+    {
 
         $request = Application::getInstance()->getContext()->getRequest();
 
@@ -127,7 +139,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
     /**
      * @return bool
      */
-    public function isCaptchaVerify() {
+    public function isCaptchaVerify()
+    {
 
         if ($this->isUseCaptcha()) {
 
@@ -141,7 +154,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
     }
 
 
-    public function executeComponent() {
+    public function executeComponent()
+    {
 
         global $APPLICATION;
 
@@ -169,7 +183,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                     echo(Loc::getMessage('COMPONENT_BASKET_SHARING_CAPTCHA_ERROR_MESSAGE'));
                 } else {
 
-                    $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $basketHash, $userId = Fuser::getId());
+                    $this->arResult['BASKET']['ID'] = $storage->saveBasketToStorage($basketValue, $basketHash,
+                        $userId = Fuser::getId());
                     echo $this->arResult['BASKET']['ID'];
 
                 }
@@ -207,6 +222,18 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
                 echo(Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE'));
                 exit();
+            }
+
+            if ($this->arResult['STATUS']['IS_SEND_BASKET_INFO']) {
+                $APPLICATION->restartBuffer();
+
+
+                // проверить, что в настройках разрешена отправка эмейл
+                // проверить, что в настройках разрешена отправка смс
+                // проверить, авторизован ли пользователь
+                // проверить валидность введенного телефона и смс
+                // отправка
+                // сохранение информации об отправке
             }
 
 

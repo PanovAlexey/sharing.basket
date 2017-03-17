@@ -23,6 +23,32 @@ $(document).ready(function () {
         return false;
     });
 
+    $(".js-submit-button").click(function () {
+        email = $('.js-basket-send-email').val();
+        phone = $('.js-basket-send-phone').val();
+
+        var data = "email=" + email + "&phone=" + phone+"&send_basket=y";
+
+        if (email || phone) {
+            $.ajax({
+                type: "POST",
+                url: window.location.href,
+                data: data,
+                success: function (responseMessage) {
+                    if (responseMessage) {
+
+                    }
+                    else {
+
+                    }
+
+                }
+            });
+        }
+
+        return false;
+    });
+
     $("#enter_code_show").click(function () {
         $("#codeblog_basket_showing_enter_code").fadeIn();
         $("#codeblog-basket-answer").hide();

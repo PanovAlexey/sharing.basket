@@ -2,7 +2,7 @@
     die();
 }
 
-$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA']   = 'РџРѕРєР°Р·С‹РІР°С‚СЊ captcha?';
-$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_N'] = 'РќРµ РІС‹РІРѕРґРёС‚СЊ РєР°РїС‡Сѓ';
-$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_S'] = 'РўРѕР»СЊРєРѕ РґР»СЏ РЅРµР°РІС‚РѕСЂРёР·РѕРІР°РЅРЅС‹С…';
-$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_Y'] = 'Р’С‹РІРѕРґРёС‚СЊ РєР°РїС‡Сѓ РґР»СЏ РІСЃРµС…';
+$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA']   = 'Показывать captcha?';
+$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_N'] = 'Не выводить капчу';
+$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_S'] = 'Только для неавторизованных';
+$MESS['CODEBLOGPRO_BASKET_SHARING_IS_USE_CAPTCHA_Y'] = 'Выводить капчу для всех';
