@@ -1,8 +1,8 @@
 <?
 $MESS['CODEBLOG_PARTNER']                            = 'CodeBlogPro';
 $MESS['CODEBLOG_PARTNER_URI']                        = 'http://codeblog.pro';
-$MESS['CODEBLOG_SHARING_BASKET_INSTALL_NAME']        = 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½';
-$MESS['CODEBLOG_SHARING_BASKET_INSTALL_DESCRIPTION'] = 'ÐœÐ¾Ð´ÑƒÐ»ÑŒ Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÐµÑ‚ ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÑ‚ÑŒ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹, Ð¿ÐµÑ€ÐµÐ´Ð°Ð²Ð°Ñ‚ÑŒ Ð´Ñ€ÑƒÐ³Ð¾Ð¼Ñƒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŽ Ð¸ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°Ñ‚ÑŒ ÐµÑ‘ Ð²Ð¿Ð¾ÑÐ»ÐµÐ´ÑÑ‚Ð²Ð¸Ð¸ Ð¿Ð¾ ÐºÐ¾Ð´Ñƒ';
-$MESS['CODEBLOG_SHARING_BASKET_INSTALL_TITLE']       = 'Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð¼Ð¾Ð´ÑƒÐ»Ñ &laquo;Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½&raquo;';
-$MESS['CODEBLOG_SHARING_BASKET_UNINSTALL_TITLE']     = 'Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð¼Ð¾Ð´ÑƒÐ»Ñ &laquo;Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½&raquo;';
-$MESS['CODEBLOG_SHARING_BASKET_MODULE_REQUIRED']     = 'Ð”Ð»Ñ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ Ñ€ÐµÑˆÐµÐ½Ð¸Ñ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ð¼Ð¾Ð´ÑƒÐ»Ñ Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ðµ Ð¸ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½.';
+$MESS['CODEBLOG_SHARING_BASKET_INSTALL_NAME']        = 'Ñîõðàíåíèå è âîññòàíîâëåíèå êîðçèí';
+$MESS['CODEBLOG_SHARING_BASKET_INSTALL_DESCRIPTION'] = 'Ìîäóëü ïîçâîëÿåò ñîõðàíÿòü ñîäåðæèìîå êîðçèíû, ïåðåäàâàòü äðóãîìó ïîëüçîâàòåëþ è âîññòàíàâëèâàòü å¸ âïîñëåäñòâèè ïî êîäó';
+$MESS['CODEBLOG_SHARING_BASKET_INSTALL_TITLE']       = 'Óñòàíîâêà ìîäóëÿ &laquo;Ñîõðàíåíèå è âîññòàíîâëåíèå êîðçèí&raquo;';
+$MESS['CODEBLOG_SHARING_BASKET_UNINSTALL_TITLE']     = 'Óäàëåíèå ìîäóëÿ &laquo;Ñîõðàíåíèå è âîññòàíîâëåíèå êîðçèí&raquo;';
+$MESS['CODEBLOG_SHARING_BASKET_MODULE_REQUIRED']     = 'Äëÿ óñòàíîâêè äàííîãî ðåøåíèÿ íåîáõîäèìî íàëè÷èå ìîäóëÿ Ñîõðàíåíèå è âîññòàíîâëåíèå êîðçèí.';

@@ -34,7 +34,8 @@ class codeblog_sharingbasket extends \CModule
     public $PARTNER_NAME;
     public $PARTNER_URI;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $arModuleVersion = array();
 
@@ -53,16 +54,18 @@ class codeblog_sharingbasket extends \CModule
     }
 
 
-    public function InstallFiles($arParams = array()) {
+    public function InstallFiles($arParams = array())
+    {
 
         CopyDirFiles(__DIR__ . '/components', Application::getDocumentRoot() . BX_ROOT . '/components', true, true);
-        CopyDirFiles(Application::getDocumentRoot() . '/local/modules/' . $this->MODULE_ID
-                     . '/admin', Application::getDocumentRoot() . BX_ROOT . '/admin', true, true);
+        CopyDirFiles(Application::getDocumentRoot() . '/local/modules/' . $this->MODULE_ID . '/admin',
+            Application::getDocumentRoot() . BX_ROOT . '/admin', true, true);
 
         return true;
     }
 
-    public function UnInstallFiles() {
+    public function UnInstallFiles()
+    {
 
         File::deleteFile(Application::getDocumentRoot() . BX_ROOT . '/admin/codeblog_sharingbasket_edit_options.php');
         Directory::deleteDirectory(Application::getDocumentRoot() . BX_ROOT . '/components/codeblogpro/basket.sharing');
@@ -70,10 +73,10 @@ class codeblog_sharingbasket extends \CModule
         return true;
     }
 
-    public function DoInstallStorage() {
+    public function DoInstallStorage()
+    {
 
-        $storage = Storage\StorageHelper::getStorage();
-
+        $storage   = Storage\StorageHelper::getStorage();
         $storageId = $storage->getStorageId();
 
         if ($storageId == 0) {
@@ -82,7 +85,8 @@ class codeblog_sharingbasket extends \CModule
 
     }
 
-    public function UnInstallStorage() {
+    public function UnInstallStorage()
+    {
 
         $storage = Storage\StorageHelper::getStorage();
 
@@ -94,7 +98,8 @@ class codeblog_sharingbasket extends \CModule
 
     }
 
-    public function DoInstall() {
+    public function DoInstall()
+    {
 
         global $APPLICATION;
         global $step;
@@ -102,9 +107,10 @@ class codeblog_sharingbasket extends \CModule
         $step = (int)$step;
 
         if ($step < 1) {
-            $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_INSTALL_TITLE', array('#MODULE#',
-                                                                                                          $this->MODULE_NAME)), __DIR__
-                                                                                                                                . '/step.php');
+            $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_INSTALL_TITLE', array(
+                '#MODULE#',
+                $this->MODULE_NAME
+            )), __DIR__ . '/step.php');
         } elseif ($step >= 1) {
 
             $request = Application::getInstance()->getContext()->getRequest();
@@ -122,15 +128,17 @@ class codeblog_sharingbasket extends \CModule
             $this->InstallFiles();
             $this->DoInstallStorage();
 
-            $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_INSTALL_TITLE', array('#MODULE#',
-                                                                                                          $this->MODULE_NAME)), __DIR__
-                                                                                                                                . '/step2.php');
+            $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_INSTALL_TITLE', array(
+                '#MODULE#',
+                $this->MODULE_NAME
+            )), __DIR__ . '/step2.php');
 
 
         }
     }
 
-    public function DoUninstall() {
+    public function DoUninstall()
+    {
 
         global $APPLICATION;
 
@@ -143,8 +151,9 @@ class codeblog_sharingbasket extends \CModule
 
         UnRegisterModule($this->MODULE_ID);
 
-        $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_UNINSTALL_TITLE', array('#MODULE#',
-                                                                                                        $this->MODULE_NAME)), __DIR__
-                                                                                                                              . '/unstep.php');
+        $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_UNINSTALL_TITLE', array(
+            '#MODULE#',
+            $this->MODULE_NAME
+        )), __DIR__ . '/unstep.php');
     }
 }
