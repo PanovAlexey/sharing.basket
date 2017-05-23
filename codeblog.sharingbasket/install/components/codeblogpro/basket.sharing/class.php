@@ -15,6 +15,8 @@ use CodeBlog\SharingBasket\Captcha;
 
 \Bitrix\Main\Loader::includeModule('codeblog.sharingbasket');
 
+Loc::loadMessages(__FILE__);
+
 CJSCore::Init('jquery');
 
 class CCodeBlogBasketSharingComponent extends \CBitrixComponent
@@ -78,7 +80,6 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         $this->arResult['URL']['CLEAR'] = $urlClear->getUri();
 
         $this->arResult['STATUS']['IS_SAVE_BASKET']         = ($request->get('save_basket') == 'y');
-        $this->arResult['STATUS']['IS_BASKET_SHARING_AJAX'] = ($request->get('basket_sharing_ajax') == 'y');
         $this->arResult['STATUS']['IS_APPLIED_CODE']        = ((int)$request->get('saved_basket_id') > 0);
         $this->arResult['STATUS']['IS_SEND_BASKET_INFO']    = ($request->get('send_basket') == 'y');
 
