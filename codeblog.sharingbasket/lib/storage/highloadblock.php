@@ -293,6 +293,10 @@ class Highloadblock implements SaveAndRestore
         }
     }
 
+    public static function increaseTheCountOfSending($basketId) {
+        return false;
+    }
+
     public static function getHighloadBlockCollection($filter, $limit = 1) {
 
         $params['filter']      = $filter;

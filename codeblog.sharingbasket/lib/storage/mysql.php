@@ -66,7 +66,7 @@ class Mysql implements SaveAndRestore
     public function getStorageId()
     {
         /**
-         * Временный костыль. Т.к. id у таблицы в отличии от инфоблока нету,то
+         * @Todo Переделать более красиво: Т.к. id у таблицы в отличии от инфоблока нету,то
          * возвращаем положительнео число, если таблица существует и 0 в ином случае.
          */
         $storageId = (int)$this->isStorageExist();
@@ -90,7 +90,6 @@ class Mysql implements SaveAndRestore
 
 
     /**
-     * @ToDo
      *
      * @param $hash
      *
@@ -165,6 +164,29 @@ class Mysql implements SaveAndRestore
         $newBaketCountOfUses = (int)$baketCountOfUses + 1;
 
         Storage\Mysql\Helper::update($pdo, $basketId, ['NUMBER_OF_USES' => $newBaketCountOfUses]);
+    }
+
+    /**
+     * @param $basketId
+     *
+     * @return void
+     */
+    public static function increaseTheCountOfSending($basketId) {
+        $basketId            = (int)$basketId;
+
+        $pdo = Storage\Mysql\Pdo::getDataBase();
+
+        $basket = Storage\Mysql\Helper::getList(
+            $pdo,
+            $select = ['id','NOTIFY_QUANT_TO_EMAIL'],
+            $filter = ['basket_code' => $basketId]
+        );
+
+        $baketCountOfSending = $basket[0]['NOTIFY_QUANT_TO_EMAIL'];
+        $newBaketCountOfSending = $baketCountOfSending + 1;
+
+        Storage\Mysql\Helper::update($pdo, $basket[0]['id'], ['NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfSending]);
+
     }
 
     /**

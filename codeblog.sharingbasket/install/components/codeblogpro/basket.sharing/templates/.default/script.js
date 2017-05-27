@@ -25,11 +25,12 @@ $(document).ready(function () {
 
     $(".js-submit-button").click(function () {
         email = $('.js-basket-send-email').val();
-        phone = $('.js-basket-send-phone').val();
+        //phone = $('.js-basket-send-phone').val();
+        code = $('#save-basket-number').text();
 
-        var data = "email=" + email + "&phone=" + phone+"&send_basket=y";
+        var data = "email=" + email /*+ "&phone=" + phone*/ + "&send_basket=y" + "&basket_code=" + code;
 
-        if (email || phone) {
+        if (email /*|| phone*/) {
             $.ajax({
                 type: "POST",
                 url: window.location.href,

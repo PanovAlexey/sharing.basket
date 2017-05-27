@@ -8,6 +8,7 @@ use \Bitrix\Main\SystemException;
 use \Bitrix\Main\Config\Option;
 use \Bitrix\Sale\Fuser;
 use \Bitrix\Main\Application;
+use \Bitrix\Main\Mail\Event;
 use \Bitrix\Main\Web\Uri;
 use CodeBlog\SharingBasket\Basket;
 use CodeBlog\SharingBasket\Storage;
@@ -154,7 +155,29 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
         return $isCaptchaVerify;
     }
 
+    /**
+     * @globals $USER
+     * @return bool
+     */
+    protected function isSendingAllowed() {
 
+        global $USER;
+
+        $isAllowed = false;
+
+        if (($this->arParams['CAPTCHA_SHOW'] == 'Y')
+            || (($this->arParams['CAPTCHA_SHOW'] == 'S') && $USER->IsAuthorized())
+        ) {
+            $isAllowed = true;
+        }
+
+        return $isAllowed;
+    }
+
+    /**
+     * @globals $APPLICATION
+     * @return void
+     */
     public function executeComponent()
     {
 
@@ -226,15 +249,65 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
             }
 
             if ($this->arResult['STATUS']['IS_SEND_BASKET_INFO']) {
+
                 $APPLICATION->restartBuffer();
 
+                if (!$this->isSendingAllowed()) {
+                    echo json_encode(['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE')]);
+                    exit();
+                }
 
-                // проверить, что в настройках разрешена отправка эмейл
-                // проверить, что в настройках разрешена отправка смс
-                // проверить, авторизован ли пользователь
-                // проверить валидность введенного телефона и смс
-                // отправка
-                // сохранение информации об отправке
+                $request = Application::getInstance()->getContext()->getRequest();
+                $emailValue = trim($request->getPost('email'));
+                $basketCodeValue = trim($request->getPost('basket_code'));
+
+                if (!filter_var($emailValue, FILTER_VALIDATE_EMAIL)) {
+                    echo json_encode(
+                        ['result' =>Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE')]
+                    );
+                    exit();
+                }
+
+                if (!ctype_digit($basketCodeValue)) {
+                    echo json_encode(
+                        ['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE')]
+                    );
+                    exit();
+                }
+
+                /**
+                 * @ToDo Добавить добавление соответствующего типа шаблонов
+                 * и шаблона письма при установке модуля
+                 */
+                $resultSend = Event::send([
+                    'EVENT_NAME' => 'CODEBLOGPRO_CODE_SEND',
+                    'LID' => SITE_ID,
+                    'C_FIELDS' => [
+                        'EMAIL' => $emailValue,
+                        'BASKET_CODE' => $basketCodeValue
+                    ],
+                ]);
+                CEvent::CheckEvents();
+
+                if ($resultSend->isSuccess()) {
+
+                    $storage = Storage\StorageHelper::getStorage();
+                    $storage->increaseTheCountOfSending($basketCodeValue);
+
+                    echo json_encode(
+                        ['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_SENDING_COMPLETED')]
+                    );
+
+                    exit();
+                } else {
+
+                    echo json_encode(
+                        ['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_SENDING_ERROR')]
+                    );
+
+                    exit();
+                }
+
             }
 
 

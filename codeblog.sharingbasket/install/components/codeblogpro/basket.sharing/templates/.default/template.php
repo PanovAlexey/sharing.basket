@@ -43,6 +43,7 @@ use Bitrix\Main\Localization\Loc;
                        placeholder="mymail@mail.com"
                        type="text">
             </div>
+            <?/*
             <div class="basket-form-control">
                 <label
                     for="name"><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_TO_VALUE') ?>
@@ -51,12 +52,12 @@ use Bitrix\Main\Localization\Loc;
                        id="phone"
                        placeholder="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_NEED_AUTH_VALUE') ?>"
                        type="text">
-            </div>
+            </div>*/?>
             <div class="basket-form-control">
                 <input class="js-print-saved-cart"
                        value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_PRINT_VALUE') ?>" type="button">
                 <input class="js-submit-button"
-                       value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE') ?>" type="submit">
+                       value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE') ?>" type="button">
             </div>
         </form>
     </div>

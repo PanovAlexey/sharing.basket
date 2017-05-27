@@ -333,6 +333,14 @@ class Iblock implements SaveAndRestore
         \CIBlockElement::SetPropertyValuesEx($basketId, false, ['CODEBLOG_NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
 
+    public static function increaseTheCountOfSending($basketId) {
+        $basketId            = (int)$basketId;
+        $baketCountOfUses    = (int)$baketCountOfUses;
+        $newBaketCountOfUses = $baketCountOfUses + 1;
+
+        \CIBlockElement::SetPropertyValuesEx($basketId, false, ['NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfUses]);
+    }
+
     /**
      * @param $basketId
      *

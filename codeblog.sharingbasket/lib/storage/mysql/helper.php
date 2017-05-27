@@ -119,7 +119,7 @@ class Helper
     {
         $elementId=(int)$elementId;
         $setString = '';
-        $whereString = 'WHERE id='.$elementId;
+        $whereString = 'WHERE id=' . $elementId;
 
         $countOfFields = count($elementFields);
         $numberOfField=0;
@@ -134,7 +134,7 @@ class Helper
             }
         }
 
-        $pdo->exec('UPDATE ' . Connection::STORAGE_CODE . ' SET '.$setString.' '.$whereString);
+        $pdo->exec('UPDATE ' . Connection::STORAGE_CODE. ' SET '.$setString.' '.$whereString);
 
     }
 
