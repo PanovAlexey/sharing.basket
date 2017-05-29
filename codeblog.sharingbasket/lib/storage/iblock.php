@@ -5,7 +5,7 @@
  * Time: 12:00
  *
  * @author    Alexey Panov <panov@codeblog.pro>
- * @copyright Copyright Â© 2016, Alexey Panov
+ * @copyright Copyright © 2016, Alexey Panov
  */
 
 namespace CodeBlog\SharingBasket\Storage;
@@ -18,7 +18,7 @@ Loader::includeModule('iblock');
 class Iblock implements SaveAndRestore
 {
 
-    const STORAGE_NAME                 = 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ð½Ñ‹Ðµ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¹';
+    const STORAGE_NAME                 = 'Ñîõðàíåííûå êîðçèíû ïîëüçîâàòåëåé';
     const STORAGE_CODE                 = 'codeblog_sharing_basket';
     const STORAGE_TYPE_NAME            = 'codeblog_technical_info';
     const STORAGE_SORT_WEIGHT_VALUE    = 500;
@@ -59,7 +59,7 @@ class Iblock implements SaveAndRestore
 
         $typeIBlockParams = ['ID'       => self::STORAGE_TYPE_NAME,
                              'SECTIONS' => 'Y',
-                             'LANG'     => ['ru' => ['NAME' => 'Ð¢ÐµÑ…Ð½Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ'],
+                             'LANG'     => ['ru' => ['NAME' => 'Òåõíè÷åñêàÿ èíôîðìàöèÿ'],
                                             'en' => ['NAME' => 'Technical information']]];
 
         $iBlockType = new \CIBlockType;
@@ -69,7 +69,7 @@ class Iblock implements SaveAndRestore
             $DB->Rollback();
 
             /**
-             * @TODO: Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð¾Ð±Ð¾Ð°Ð±Ð¾Ñ‚ÐºÑƒ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ Ñ‚Ð¸Ð¿Ð° Ð¸Ð½Ñ„Ð¾Ð±Ð»Ð¾ÐºÐ°
+             * @TODO: Äîáàâèòü îáîàáîòêó îøèáêè ñîçäàíèÿ òèïà èíôîáëîêà
              */
             //$errors = $iBlockTypeEntity->LAST_ERROR;
         } else {
@@ -117,7 +117,7 @@ class Iblock implements SaveAndRestore
     private function createPropertiesStorage($iBlockId) {
 
         $propertyDataList['BASKET_CODE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['BASKET_CODE']['NAME']          = 'ÐšÐ¾Ð´ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['BASKET_CODE']['NAME']          = 'Êîä êîðçèíû';
         $propertyDataList['BASKET_CODE']['CODE']          = 'CODEBLOG_BASKET_CODE';
         $propertyDataList['BASKET_CODE']['DEFAULT_VALUE'] = '';
         $propertyDataList['BASKET_CODE']['PROPERTY_TYPE'] = 'S';
@@ -127,7 +127,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['BASKET_CODE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['BASKET_HASH']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['BASKET_HASH']['NAME']          = 'Ð£Ð½Ð¸ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ ÐºÐ»ÑŽÑ‡ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['BASKET_HASH']['NAME']          = 'Óíèêàëüíûé êëþ÷ êîðçèíû';
         $propertyDataList['BASKET_HASH']['CODE']          = 'CODEBLOG_BASKET_HASH';
         $propertyDataList['BASKET_HASH']['DEFAULT_VALUE'] = '';
         $propertyDataList['BASKET_HASH']['PROPERTY_TYPE'] = 'S';
@@ -137,7 +137,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['BASKET_HASH']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['BASKET_VALUE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['BASKET_VALUE']['NAME']          = 'Ð¡Ð¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ  ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['BASKET_VALUE']['NAME']          = 'Ñîäåðæèìîå  êîðçèíû';
         $propertyDataList['BASKET_VALUE']['CODE']          = 'CODEBLOG_BASKET_VALUE';
         $propertyDataList['BASKET_VALUE']['DEFAULT_VALUE'] = '[]';
         $propertyDataList['BASKET_VALUE']['PROPERTY_TYPE'] = 'S';
@@ -147,7 +147,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['BASKET_VALUE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['USER_ID']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['USER_ID']['NAME']          = 'ÐÐ²Ñ‚Ð¾Ñ€ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['USER_ID']['NAME']          = 'Àâòîð êîðçèíû';
         $propertyDataList['USER_ID']['CODE']          = 'CODEBLOG_USER_ID';
         $propertyDataList['USER_ID']['DEFAULT_VALUE'] = 0;
         $propertyDataList['USER_ID']['PROPERTY_TYPE'] = 'N';
@@ -157,7 +157,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['USER_ID']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['BASKET_DATE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['BASKET_DATE']['NAME']          = 'Ð”Ð°Ñ‚Ð° ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['BASKET_DATE']['NAME']          = 'Äàòà ñîçäàíèÿ êîðçèíû';
         $propertyDataList['BASKET_DATE']['CODE']          = 'CODEBLOG_BASKET_DATE';
         $propertyDataList['BASKET_DATE']['DEFAULT_VALUE'] = '';
         $propertyDataList['BASKET_DATE']['PROPERTY_TYPE'] = 'S';
@@ -167,7 +167,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['BASKET_DATE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['NOTIFY_PHONE_VALUE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['NOTIFY_PHONE_VALUE']['NAME']          = 'ÐÐ¾Ð¼ÐµÑ€ Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð° Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ';
+        $propertyDataList['NOTIFY_PHONE_VALUE']['NAME']          = 'Íîìåð òåëåôîíà îòïðàâëåííîãî óâåäîìëåíèÿ';
         $propertyDataList['NOTIFY_PHONE_VALUE']['CODE']          = 'CODEBLOG_NOTIFY_PHONE_VALUE';
         $propertyDataList['NOTIFY_PHONE_VALUE']['DEFAULT_VALUE'] = '';
         $propertyDataList['NOTIFY_PHONE_VALUE']['PROPERTY_TYPE'] = 'S';
@@ -177,7 +177,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['NOTIFY_PHONE_VALUE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['NOTIFY_EMAIL_VALUE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['NOTIFY_EMAIL_VALUE']['NAME']          = 'Email Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ð¾Ð³Ð¾ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ';
+        $propertyDataList['NOTIFY_EMAIL_VALUE']['NAME']          = 'Email îòïðàâëåííîãî óâåäîìëåíèÿ';
         $propertyDataList['NOTIFY_EMAIL_VALUE']['CODE']          = 'CODEBLOG_NOTIFY_EMAIL_VALUE';
         $propertyDataList['NOTIFY_EMAIL_VALUE']['DEFAULT_VALUE'] = '';
         $propertyDataList['NOTIFY_EMAIL_VALUE']['PROPERTY_TYPE'] = 'S';
@@ -187,7 +187,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['NOTIFY_EMAIL_VALUE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['NOTIFY_QUANT_TO_PHONE']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['NOTIFY_QUANT_TO_PHONE']['NAME']          = 'ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ñ‹Ñ… ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹ Ð¿Ð¾ ÑÐ¼Ñ';
+        $propertyDataList['NOTIFY_QUANT_TO_PHONE']['NAME']          = 'Êîëè÷åñòâî îòïðàâëåííûõ óâåäîìëåíèé ïî ñìñ';
         $propertyDataList['NOTIFY_QUANT_TO_PHONE']['CODE']          = 'CODEBLOG_NOTIFY_QUANT_TO_PHONE';
         $propertyDataList['NOTIFY_QUANT_TO_PHONE']['DEFAULT_VALUE'] = 0;
         $propertyDataList['NOTIFY_QUANT_TO_PHONE']['PROPERTY_TYPE'] = 'N';
@@ -197,7 +197,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['NOTIFY_QUANT_TO_PHONE']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['NAME']          = 'ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð½Ñ‹Ñ… ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹ Ð¿Ð¾ email';
+        $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['NAME']          = 'Êîëè÷åñòâî îòïðàâëåííûõ óâåäîìëåíèé ïî email';
         $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['CODE']          = 'CODEBLOG_NOTIFY_QUANT_TO_EMAIL';
         $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['DEFAULT_VALUE'] = 0;
         $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['PROPERTY_TYPE'] = 'N';
@@ -207,7 +207,7 @@ class Iblock implements SaveAndRestore
         $propertyDataList['NOTIFY_QUANT_TO_EMAIL']['VERSION']       = self::STORAGE_IBLOCK_VERSION_VALUE;
 
         $propertyDataList['NUMBER_OF_USES']['IBLOCK_ID']     = $iBlockId;
-        $propertyDataList['NUMBER_OF_USES']['NAME']          = 'ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¾Ðº ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹';
+        $propertyDataList['NUMBER_OF_USES']['NAME']          = 'Êîëè÷åñòâî çàãðóçîê êîðçèíû';
         $propertyDataList['NUMBER_OF_USES']['CODE']          = 'CODEBLOG_NUMBER_OF_USES';
         $propertyDataList['NUMBER_OF_USES']['DEFAULT_VALUE'] = 0;
         $propertyDataList['NUMBER_OF_USES']['PROPERTY_TYPE'] = 'N';
@@ -298,7 +298,7 @@ class Iblock implements SaveAndRestore
                                'IBLOCK_SECTION_ID' => false,
                                'IBLOCK_ID'         => $iBlockId,
                                'PROPERTY_VALUES'   => $propertyList,
-                               'NAME'              => 'ÐšÐ¾Ñ€Ð·Ð¸Ð½Ð° ' . date('Y m d G:i:s'),
+                               'NAME'              => 'Êîðçèíà ' . date('Y m d G:i:s'),
                                'ACTIVE'            => 'Y'];
 
         $basketCode = $this->basketIsExistByHash($basketHash);
@@ -309,7 +309,7 @@ class Iblock implements SaveAndRestore
 
         if (!$iBlockElementId = $iBlockElement->Add($arLoadProductArray)) {
             /**
-             * @TODO: Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð»Ð¾Ð³Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð¾ÑˆÐ¸Ð±Ð¾Ðº
+             * @TODO: Äîáàâèòü ëîãèðîâàíèå îøèáîê
              */
             //echo $el->LAST_ERROR;
         }
@@ -333,12 +333,41 @@ class Iblock implements SaveAndRestore
         \CIBlockElement::SetPropertyValuesEx($basketId, false, ['CODEBLOG_NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
 
+    /**
+     * @param $basketId
+     *
+     * @return void
+     */
     public static function increaseTheCountOfSending($basketId) {
         $basketId            = (int)$basketId;
-        $baketCountOfUses    = (int)$baketCountOfUses;
+
+        $select   = [
+            'ID',
+            'PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL'
+        ];
+        $filter = [
+            'IBLOCK_ID'                     => self::getStorageId(),
+            'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId
+        ];
+
+        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
+        $baketCountOfUses = 0;
+        $baketElementId = 0;
+
+        if ($item = $iBlockItemsCollection->Fetch()) {
+            $baketCountOfUses = $item['PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL_VALUE'];
+            $baketElementId = $item['ID'];
+        }
+
         $newBaketCountOfUses = $baketCountOfUses + 1;
 
-        \CIBlockElement::SetPropertyValuesEx($basketId, false, ['NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfUses]);
+        \CIBlockElement::SetPropertyValuesEx(
+            $baketElementId,
+            false,
+            [
+                'CODEBLOG_NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfUses
+            ]
+        );
     }
 
     /**
@@ -356,6 +385,8 @@ class Iblock implements SaveAndRestore
                      'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId];
 
         $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
+
+        $baketValue = '';
 
         if ($item = $iBlockItemsCollection->Fetch()) {
 

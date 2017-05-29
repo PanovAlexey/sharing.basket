@@ -115,7 +115,6 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
      */
     protected function initializationCaptcha()
     {
-
         $this->arResult['CAPTCHA']['CODE']                          = Captcha\Helper::getCaptcha();
         $this->arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME']  = Captcha\Helper::CAPTCHA_SID_NAME;
         $this->arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME'] = Captcha\Helper::CAPTCHA_WORD_NAME;
@@ -165,8 +164,8 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
         $isAllowed = false;
 
-        if (($this->arParams['CAPTCHA_SHOW'] == 'Y')
-            || (($this->arParams['CAPTCHA_SHOW'] == 'S') && $USER->IsAuthorized())
+        if (($this->arParams['SEND_CODE_SHOW'] == 'Y')
+            || (($this->arParams['SEND_CODE_SHOW'] == 'S') && $USER->IsAuthorized())
         ) {
             $isAllowed = true;
         }

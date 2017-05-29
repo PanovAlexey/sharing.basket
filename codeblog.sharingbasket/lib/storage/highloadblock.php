@@ -293,10 +293,48 @@ class Highloadblock implements SaveAndRestore
         }
     }
 
+    /**
+     * @param $basketId
+     *
+     * @return void
+     */
     public static function increaseTheCountOfSending($basketId) {
+        $basketId            = (int)$basketId;
+
+        $filter['NAME'] = self::STORAGE_NAME;
+        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
+        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+
+        $basketElement = $dataClass::getList(
+            [
+                'select' => [
+                    'ID',
+                    'UF_NOTIFY_QNT_MAIL'
+                ],
+                'filter' => [
+                    'UF_BASKET_CODE' => $basketId
+                ]
+            ]
+        );
+        $basket = $basketElement->fetch();
+        $baketCountOfUses    = (int)$basket['UF_NOTIFY_QNT_MAIL'];
+
+        $dataClass::update(
+            (int)$basket['ID'],
+            [
+                'UF_NOTIFY_QNT_MAIL' => ++$baketCountOfUses
+            ]
+        );
+
         return false;
     }
 
+    /**
+     * @param     $filter
+     * @param int $limit
+     *
+     * @return \Bitrix\Main\DB\Result
+     */
     public static function getHighloadBlockCollection($filter, $limit = 1) {
 
         $params['filter']      = $filter;
@@ -336,9 +374,17 @@ class Highloadblock implements SaveAndRestore
             $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
             $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
 
-            $basketElement = $dataClass::getList(['select' => ['ID',
-                                                               'UF_BASKET_CODE'],
-                                                  'filter' => ['UF_BASKET_HASH' => $hash]]);
+            $basketElement = $dataClass::getList(
+                [
+                    'select' => [
+                        'ID',
+                        'UF_BASKET_CODE'
+                    ],
+                    'filter' => [
+                        'UF_BASKET_HASH' => $hash
+                    ]
+                ]
+            );
 
             $basket = $basketElement->fetch();
 
@@ -372,11 +418,15 @@ class Highloadblock implements SaveAndRestore
             return $basketCode;
         }
 
-        $newStorageElement = $dataClass::add(['UF_BASKET_CODE'  => $timeCurrent,
-                                              'UF_BASKET_HASH'  => $basketHash,
-                                              'UF_BASKET_VALUE' => $basketValue,
-                                              'UF_USER_ID'      => $userId,
-                                              'UF_BASKET_DATE'  => $timeCurrent]);
+        $newStorageElement = $dataClass::add(
+            [
+                'UF_BASKET_CODE'  => $timeCurrent,
+                'UF_BASKET_HASH'  => $basketHash,
+                'UF_BASKET_VALUE' => $basketValue,
+                'UF_USER_ID'      => $userId,
+                'UF_BASKET_DATE'  => $timeCurrent
+            ]
+        );
 
         return ($newStorageElement->getData()['UF_BASKET_CODE']);
 
@@ -409,10 +459,17 @@ class Highloadblock implements SaveAndRestore
         $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
         $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
 
-        $basketElement = $dataClass::getList(['select' => ['ID',
-                                                           'UF_BASKET_VALUE',
-                                                           'UF_NUMBER_OF_USES'],
-                                              'filter' => ['UF_BASKET_CODE' => $basketId]]);
+        $basketElement = $dataClass::getList(
+            [
+                'select' => [
+                    'ID',
+                    'UF_BASKET_VALUE',
+                    'UF_NUMBER_OF_USES'],
+                'filter' => [
+                    'UF_BASKET_CODE' => $basketId
+                ]
+            ]
+        );
 
         $basket = $basketElement->fetch();
 
