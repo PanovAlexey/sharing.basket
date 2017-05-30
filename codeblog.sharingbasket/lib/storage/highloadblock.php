@@ -19,6 +19,17 @@ class Highloadblock implements SaveAndRestore
 
     const STORAGE_NAME = 'CodeblogSharingBasketStorage';
 
+    /**
+     * @return \Bitrix\Main\Entity\DataManager
+     */
+    protected static function getCurrentDataClass() {
+        $filter['NAME'] = self::STORAGE_NAME;
+        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
+        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+
+        return $dataClass;
+    }
+
     public static function deleteStorage($storageId) {
         HighloadBlockTable::delete($storageId);
     }
@@ -294,16 +305,23 @@ class Highloadblock implements SaveAndRestore
     }
 
     /**
-     * @param $basketId
+     * @param int $basketId
+     * @param string $emailValue
+     *
+     * @return void
+     */
+    public static function saveEmailValue($basketId, $emailValue) {
+
+    }
+
+    /**
+     * @param int $basketId
      *
      * @return void
      */
     public static function increaseTheCountOfSending($basketId) {
-        $basketId            = (int)$basketId;
-
-        $filter['NAME'] = self::STORAGE_NAME;
-        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
-        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+        $basketId  = (int)$basketId;
+        $dataClass = self::getCurrentDataClass();
 
         $basketElement = $dataClass::getList(
             [
@@ -370,9 +388,7 @@ class Highloadblock implements SaveAndRestore
 
         if (!empty($hash)) {
 
-            $filter['NAME'] = self::STORAGE_NAME;
-            $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
-            $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+            $dataClass = self::getCurrentDataClass();
 
             $basketElement = $dataClass::getList(
                 [
@@ -405,10 +421,7 @@ class Highloadblock implements SaveAndRestore
      */
     public function saveBasketToStorage($basketValue, $basketHash = '', $userId = 0) {
 
-        $filter['NAME'] = self::STORAGE_NAME;
-
-        $hlBlock   = self::getHighloadBlockCollection($filter)->fetch();
-        $dataClass = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+        $dataClass = self::getCurrentDataClass();
 
         $timeCurrent = time();
 
@@ -444,10 +457,7 @@ class Highloadblock implements SaveAndRestore
         $basketId            = (int)$basketId;
         $baketCountOfUses    = (int)$baketCountOfUses;
         $newBaketCountOfUses = $baketCountOfUses + 1;
-
-        $filter['NAME'] = self::STORAGE_NAME;
-        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
-        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+        $dataClass           = self::getCurrentDataClass();
 
         $dataClass::update($basketId, ['UF_NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
@@ -455,9 +465,7 @@ class Highloadblock implements SaveAndRestore
     public function restoreBasketItemsListFromStorage($basketId) {
 
         $basketId       = (int)$basketId;
-        $filter['NAME'] = self::STORAGE_NAME;
-        $hlBlock        = self::getHighloadBlockCollection($filter)->fetch();
-        $dataClass      = HighloadBlockTable::compileEntity($hlBlock)->getDataClass();
+        $dataClass      = self::getCurrentDataClass();
 
         $basketElement = $dataClass::getList(
             [
