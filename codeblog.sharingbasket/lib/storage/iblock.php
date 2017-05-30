@@ -334,6 +334,56 @@ class Iblock implements SaveAndRestore
     }
 
     /**
+     * @param int $basketId
+     * @param string $emailValue
+     *
+     * @return $isEmailUpdate bool
+     */
+    public static function saveEmailValue($basketId, $emailValue) {
+        $basketId  = (int)$basketId;
+
+        $isEmailUpdate = false;
+
+        $select = [
+            'ID',
+            'PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE'
+        ];
+        $filter = [
+            'IBLOCK_ID'                     => self::getStorageId(),
+            'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId
+        ];
+
+        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
+        $basket = $iBlockItemsCollection->Fetch();
+
+        if (!empty(trim($basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']))) {
+
+            if (!in_array($emailValue, explode(',', $basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']))) {
+                $emailNewValue = trim($basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']) . ',' . $emailValue;
+                $isEmailUpdate = true;
+            } else {
+                $emailNewValue = $basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE'];
+            }
+
+        } else {
+            $emailNewValue = $emailValue;
+            $isEmailUpdate = true;
+        }
+
+        \CIBlockElement::SetPropertyValuesEx(
+            $basket['ID'],
+            false,
+            [
+                'CODEBLOG_NOTIFY_EMAIL_VALUE' => $emailNewValue
+            ]
+        );
+
+
+        return $isEmailUpdate;
+
+    }
+
+    /**
      * @param $basketId
      *
      * @return void

@@ -167,6 +167,43 @@ class Mysql implements SaveAndRestore
     }
 
     /**
+     * @param int $basketId
+     * @param string $emailValue
+     *
+     * @return $isEmailUpdate bool
+     */
+    public static function saveEmailValue($basketId, $emailValue) {
+        $basketId      = (int)$basketId;
+        $isEmailUpdate = false;
+
+        $pdo = Storage\Mysql\Pdo::getDataBase();
+
+        $basket = Storage\Mysql\Helper::getList(
+            $pdo,
+            $select = ['id','NOTIFY_EMAIL_VALUE'],
+            $filter = ['basket_code' => $basketId]
+        );
+
+        if (!empty($basket[0]['NOTIFY_EMAIL_VALUE'])) {
+            if (!in_array($emailValue, explode(',', $basket[0]['NOTIFY_EMAIL_VALUE']))) {
+                $emailNewValue = trim($basket[0]['NOTIFY_EMAIL_VALUE']) . ',' . $emailValue;
+                $isEmailUpdate = true;
+            } else {
+                $emailNewValue = $basket[0]['NOTIFY_EMAIL_VALUE'];
+            }
+        } else {
+            $emailNewValue = $emailValue;
+            $isEmailUpdate = true;
+        }
+
+        Storage\Mysql\Helper::update($pdo, $basket[0]['id'], ['NOTIFY_EMAIL_VALUE' => "'" . $emailNewValue . "'"]);
+
+
+        return $isEmailUpdate;
+
+    }
+
+    /**
      * @param $basketId
      *
      * @return void

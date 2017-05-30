@@ -251,10 +251,10 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
                 $APPLICATION->restartBuffer();
 
-                if (!$this->isSendingAllowed()) {
+                /*if (!$this->isSendingAllowed()) {
                     echo json_encode(['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_INCORRECT_CODE')]);
                     exit();
-                }
+                }*/
 
                 $request = Application::getInstance()->getContext()->getRequest();
                 $emailValue = trim($request->getPost('email'));
@@ -292,6 +292,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
                     $storage = Storage\StorageHelper::getStorage();
                     $storage->increaseTheCountOfSending($basketCodeValue);
+                    $storage->saveEmailValue($basketCodeValue, $emailValue);
 
                     echo json_encode(
                         ['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_SENDING_COMPLETED')]

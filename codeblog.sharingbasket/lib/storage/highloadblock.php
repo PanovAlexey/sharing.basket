@@ -308,9 +308,46 @@ class Highloadblock implements SaveAndRestore
      * @param int $basketId
      * @param string $emailValue
      *
-     * @return void
+     * @return $isEmailUpdate bool
      */
     public static function saveEmailValue($basketId, $emailValue) {
+        $basketId  = (int)$basketId;
+        $dataClass = self::getCurrentDataClass();
+        $isEmailUpdate = false;
+
+        $basketElement = $dataClass::getList(
+            [
+                'select' => [
+                    'ID',
+                    'UF_NOTIFY_MAIL_VAL',
+                ],
+                'filter' => [
+                    'UF_BASKET_CODE' => $basketId
+                ]
+            ]
+        );
+        $basket = $basketElement->fetch();
+
+        if (!empty($basket['UF_NOTIFY_MAIL_VAL'])) {
+            if (!in_array($emailValue, explode(',', $basket['UF_NOTIFY_MAIL_VAL']))) {
+                $emailNewValue = trim($basket['UF_NOTIFY_MAIL_VAL']) . ',' . $emailValue;
+                $isEmailUpdate = true;
+            } else {
+                $emailNewValue = $basket['UF_NOTIFY_MAIL_VAL'];
+            }
+        } else {
+            $emailNewValue = $emailValue;
+            $isEmailUpdate = true;
+        }
+
+        $dataClass::update(
+            (int)$basket['ID'],
+            [
+                'UF_NOTIFY_MAIL_VAL' => $emailNewValue
+            ]
+        );
+
+        return $isEmailUpdate;
 
     }
 
@@ -344,7 +381,6 @@ class Highloadblock implements SaveAndRestore
             ]
         );
 
-        return false;
     }
 
     /**
