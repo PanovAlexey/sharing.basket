@@ -8,11 +8,11 @@ use \Bitrix\Main\SystemException;
 use \Bitrix\Main\Config\Option;
 use \Bitrix\Sale\Fuser;
 use \Bitrix\Main\Application;
-use \Bitrix\Main\Mail\Event;
 use \Bitrix\Main\Web\Uri;
 use CodeBlog\SharingBasket\Basket;
 use CodeBlog\SharingBasket\Storage;
 use CodeBlog\SharingBasket\Captcha;
+use CodeBlog\SharingBasket\Sending;
 
 \Bitrix\Main\Loader::includeModule('codeblog.sharingbasket');
 
@@ -189,7 +189,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 $this->initializationCaptcha();
             }
 
-            $basket       = new Basket\Basket();
+            $basket       = new Basket\BasketBitrix();
             $basketFields = $basket->getItemsListFormat($getBasketHash = true);
             $basketValue  = $basketFields['ITEMS_LIST_FORMAT'];
             $basketHash   = $basketFields['BASKET_HASH'];
@@ -220,7 +220,7 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
 
                 $savedBasketId = (int)Application::getInstance()->getContext()->getRequest()->get('saved_basket_id');
 
-                $basket = new Basket\Basket();
+                $basket = new Basket\BasketBitrix();
 
                 $storage = Storage\StorageHelper::getStorage();
 
@@ -274,23 +274,13 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                     exit();
                 }
 
-                /**
-                 * @ToDo Добавить добавление соответствующего типа шаблонов
-                 * и шаблона письма при установке модуля
-                 */
-                $resultSend = Event::send([
-                    'EVENT_NAME' => 'CODEBLOGPRO_CODE_SEND',
-                    'LID' => SITE_ID,
-                    'C_FIELDS' => [
-                        'EMAIL' => $emailValue,
-                        'BASKET_CODE' => $basketCodeValue
-                    ],
-                ]);
-                CEvent::CheckEvents();
+                $storage = Storage\StorageHelper::getStorage();
+                $basket = $storage->getBasketByCode($basketCodeValue);
 
-                if ($resultSend->isSuccess()) {
+                $resultSend = Sending\Email::send($emailValue, $basket);
 
-                    $storage = Storage\StorageHelper::getStorage();
+                if ($resultSend['STATUS'] == true) {
+
                     $storage->increaseTheCountOfSending($basketCodeValue);
                     $storage->saveEmailValue($basketCodeValue, $emailValue);
 
@@ -302,14 +292,16 @@ class CCodeBlogBasketSharingComponent extends \CBitrixComponent
                 } else {
 
                     echo json_encode(
-                        ['result' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_SENDING_ERROR')]
+                        [
+                            'MESSAGE' => Loc::getMessage('COMPONENT_BASKET_SHARING_BASKET_SENDING_ERROR'),
+                            'STATUS' => $resultSend['STATUS']
+                        ]
                     );
 
                     exit();
                 }
 
             }
-
 
             $this->includeComponentTemplate();
         } catch (SystemException $e) {

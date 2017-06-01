@@ -10,8 +10,10 @@
 
 namespace CodeBlog\SharingBasket\Storage;
 
+
 use \CodeBlog\SharingBasket\Storage;
-use CodeBlog\SharingBasket\Storage\Mysql\Connection;
+use \CodeBlog\SharingBasket\Storage\Mysql\Connection;
+use \CodeBlog\SharingBasket\Basket\Basket;
 
 class Mysql implements SaveAndRestore
 {
@@ -28,7 +30,6 @@ class Mysql implements SaveAndRestore
 
         $pdo->exec("DROP TABLE " . Connection::STORAGE_CODE);
     }
-
 
     /**
      * @return bool
@@ -88,7 +89,6 @@ class Mysql implements SaveAndRestore
         return $isExistsTable;
     }
 
-
     /**
      *
      * @param $hash
@@ -111,7 +111,6 @@ class Mysql implements SaveAndRestore
             return $basketElementsListInStorage[0]['basket_code'];
         }
     }
-
 
     /**
      *
@@ -151,52 +150,48 @@ class Mysql implements SaveAndRestore
     /**
      *
      * @param $basketId
-     * @param $baketCountOfUses
+     * @param $basketCountOfUses
      *
      * @return void
      */
-    protected static function increaseTheCountOfUses($basketId, $baketCountOfUses)
+    protected static function increaseTheCountOfUses($basketId, $basketCountOfUses)
     {
 
         $pdo = Storage\Mysql\Pdo::getDataBase();
 
         $basketId            = (int)$basketId;
-        $newBaketCountOfUses = (int)$baketCountOfUses + 1;
+        $newBasketCountOfUses = (int)$basketCountOfUses + 1;
 
-        Storage\Mysql\Helper::update($pdo, $basketId, ['NUMBER_OF_USES' => $newBaketCountOfUses]);
+        Storage\Mysql\Helper::update($pdo, $basketId, ['NUMBER_OF_USES' => $newBasketCountOfUses]);
     }
 
     /**
-     * @param int $basketId
+     * @param int $basketCode
      * @param string $emailValue
      *
-     * @return $isEmailUpdate bool
+     * @return bool $isEmailUpdate
      */
-    public static function saveEmailValue($basketId, $emailValue) {
-        $basketId      = (int)$basketId;
+    public static function saveEmailValue($basketCode, $emailValue) {
+
         $isEmailUpdate = false;
 
         $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        $basket = Storage\Mysql\Helper::getList(
-            $pdo,
-            $select = ['id','NOTIFY_EMAIL_VALUE'],
-            $filter = ['basket_code' => $basketId]
-        );
+        $basket = self::getBasketByCode($basketCode);
 
-        if (!empty($basket[0]['NOTIFY_EMAIL_VALUE'])) {
-            if (!in_array($emailValue, explode(',', $basket[0]['NOTIFY_EMAIL_VALUE']))) {
-                $emailNewValue = trim($basket[0]['NOTIFY_EMAIL_VALUE']) . ',' . $emailValue;
+        if (!empty($basket->getNotifyEmailValue())) {
+            if (!in_array($emailValue, explode(',', $basket->getNotifyEmailValue()))) {
+                $emailNewValue = $basket->getNotifyEmailValue() . ',' . $emailValue;
                 $isEmailUpdate = true;
             } else {
-                $emailNewValue = $basket[0]['NOTIFY_EMAIL_VALUE'];
+                $emailNewValue = $basket->getNotifyEmailValue();
             }
         } else {
             $emailNewValue = $emailValue;
             $isEmailUpdate = true;
         }
 
-        Storage\Mysql\Helper::update($pdo, $basket[0]['id'], ['NOTIFY_EMAIL_VALUE' => "'" . $emailNewValue . "'"]);
+        Storage\Mysql\Helper::update($pdo, $basket->getId(), ['NOTIFY_EMAIL_VALUE' => "'" . $emailNewValue . "'"]);
 
 
         return $isEmailUpdate;
@@ -204,46 +199,64 @@ class Mysql implements SaveAndRestore
     }
 
     /**
-     * @param $basketId
+     * @param int $basketCode
      *
      * @return void
      */
-    public static function increaseTheCountOfSending($basketId) {
-        $basketId            = (int)$basketId;
+    public static function increaseTheCountOfSending($basketCode) {
 
         $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        $basket = Storage\Mysql\Helper::getList(
-            $pdo,
-            $select = ['id','NOTIFY_QUANT_TO_EMAIL'],
-            $filter = ['basket_code' => $basketId]
-        );
+        $basket = self::getBasketByCode($basketCode);
 
-        $baketCountOfSending = $basket[0]['NOTIFY_QUANT_TO_EMAIL'];
-        $newBaketCountOfSending = $baketCountOfSending + 1;
+        $basketCountOfSending = $basket->getNotifyQuantityToEmail();
+        $newBasketCountOfSending = $basketCountOfSending + 1;
 
-        Storage\Mysql\Helper::update($pdo, $basket[0]['id'], ['NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfSending]);
+        Storage\Mysql\Helper::update($pdo, $basket->getId(), ['NOTIFY_QUANT_TO_EMAIL' => $newBasketCountOfSending]);
 
     }
 
     /**
      *
-     * @param $basketId
+     * @param $basketCode
      *
      * @return string
      */
-    public function restoreBasketItemsListFromStorage($basketId)
+    public function restoreBasketItemsListFromStorage($basketCode)
     {
 
-        $basketId = (int)$basketId;
+        $basket = self::getBasketByCode($basketCode);
+
+        self::increaseTheCountOfUses($basket->getId(), $basket->getNumberOfUses());
+
+        return $basket->getValue();
+
+    }
+
+    /**
+     * @param int $basketCode
+     *
+     * @return \CodeBlog\SharingBasket\Basket\Basket Basket
+     */
+    public static function getBasketByCode($basketCode) {
+
         $pdo = Storage\Mysql\Pdo::getDataBase();
 
-        $basket = Storage\Mysql\Helper::getList($pdo,$select=['id','basket_code','basket_value','NUMBER_OF_USES'],$filter=['basket_code'=>$basketId]);
+        $basketElement = Storage\Mysql\Helper::getList($pdo, $select = ['*'], $filter = ['basket_code' => $basketCode]);
 
-        self::increaseTheCountOfUses( $basket[0]['id'], $basket[0]['UF_NUMBER_OF_USES']);
+        $basket = new Basket(
+            $basketElement[0]['id'],
+            $basketElement[0]['basket_code'],
+            $basketElement[0]['basket_value'],
+            $basketElement[0]['basket_hash'],
+            $basketElement[0]['basket_date'],
+            $basketElement[0]['user_id'],
+            $basketElement[0]['NOTIFY_EMAIL_VALUE'],
+            $basketElement[0]['NOTIFY_QUANT_TO_EMAIL'],
+            $basketElement[0]['NUMBER_OF_USES']
+        );
 
-        return $basket[0]['basket_value'];
-
+        return $basket;
     }
 
 }

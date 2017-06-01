@@ -12,6 +12,7 @@ namespace CodeBlog\SharingBasket\Storage;
 
 use \Bitrix\Main\Loader;
 use \CodeBlog\SharingBasket\Site;
+use \CodeBlog\SharingBasket\Basket\Basket;
 
 Loader::includeModule('iblock');
 
@@ -247,6 +248,11 @@ class Iblock implements SaveAndRestore
         return (bool)$this->getStorageId();
     }
 
+    /**
+     * @param $hash
+     *
+     * @return int
+     */
     protected function basketIsExistByHash($hash) {
 
         $baketCode = 0;
@@ -334,35 +340,24 @@ class Iblock implements SaveAndRestore
     }
 
     /**
-     * @param int $basketId
+     * @param int $basketCode
      * @param string $emailValue
      *
      * @return $isEmailUpdate bool
      */
-    public static function saveEmailValue($basketId, $emailValue) {
-        $basketId  = (int)$basketId;
+    public static function saveEmailValue($basketCode, $emailValue) {
 
         $isEmailUpdate = false;
 
-        $select = [
-            'ID',
-            'PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE'
-        ];
-        $filter = [
-            'IBLOCK_ID'                     => self::getStorageId(),
-            'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId
-        ];
+        $basket = self::getBasketByCode($basketCode);
 
-        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
-        $basket = $iBlockItemsCollection->Fetch();
+        if (!empty($basket->getNotifyEmailValue())) {
 
-        if (!empty(trim($basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']))) {
-
-            if (!in_array($emailValue, explode(',', $basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']))) {
-                $emailNewValue = trim($basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE']) . ',' . $emailValue;
+            if (!in_array($emailValue, explode(',', $basket->getNotifyEmailValue()))) {
+                $emailNewValue = $basket->getNotifyEmailValue() . ',' . $emailValue;
                 $isEmailUpdate = true;
             } else {
-                $emailNewValue = $basket['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE'];
+                $emailNewValue = $basket->getNotifyEmailValue();
             }
 
         } else {
@@ -371,7 +366,7 @@ class Iblock implements SaveAndRestore
         }
 
         \CIBlockElement::SetPropertyValuesEx(
-            $basket['ID'],
+            $basket->getId(),
             false,
             [
                 'CODEBLOG_NOTIFY_EMAIL_VALUE' => $emailNewValue
@@ -384,35 +379,18 @@ class Iblock implements SaveAndRestore
     }
 
     /**
-     * @param $basketId
+     * @param $basketCode
      *
      * @return void
      */
-    public static function increaseTheCountOfSending($basketId) {
-        $basketId            = (int)$basketId;
+    public static function increaseTheCountOfSending($basketCode) {
 
-        $select   = [
-            'ID',
-            'PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL'
-        ];
-        $filter = [
-            'IBLOCK_ID'                     => self::getStorageId(),
-            'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId
-        ];
+        $basket = self::getBasketByCode($basketCode);
 
-        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
-        $baketCountOfUses = 0;
-        $baketElementId = 0;
-
-        if ($item = $iBlockItemsCollection->Fetch()) {
-            $baketCountOfUses = $item['PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL_VALUE'];
-            $baketElementId = $item['ID'];
-        }
-
-        $newBaketCountOfUses = $baketCountOfUses + 1;
+        $newBaketCountOfUses = $basket->getNotifyQuantityToEmail() + 1;
 
         \CIBlockElement::SetPropertyValuesEx(
-            $baketElementId,
+            $basket->getId(),
             false,
             [
                 'CODEBLOG_NOTIFY_QUANT_TO_EMAIL' => $newBaketCountOfUses
@@ -421,34 +399,62 @@ class Iblock implements SaveAndRestore
     }
 
     /**
-     * @param $basketId
+     * @param $basketCode
      *
      * @return string
      */
-    public function restoreBasketItemsListFromStorage($basketId) {
+    public function restoreBasketItemsListFromStorage($basketCode) {
 
-        $basketId = (int)$basketId;
-        $select   = ['ID',
-                     'PROPERTY_CODEBLOG_BASKET_VALUE',
-                     'PROPERTY_CODEBLOG_NUMBER_OF_USES'];
-        $filter   = ['IBLOCK_ID'                     => self::getStorageId(),
-                     'PROPERTY_CODEBLOG_BASKET_CODE' => $basketId];
+        $basket = self::getBasketByCode($basketCode);
+
+        self::increaseTheCountOfUses($basket->getId(), $basket->getNumberOfUses());
+
+        return $basket->getValue();
+
+    }
+
+    /**
+     * @param int $basketCode
+     *
+     * @return \CodeBlog\SharingBasket\Basket\Basket Basket
+     */
+    public static function getBasketByCode($basketCode) {
+
+        $select   = [
+            'ID',
+            'PROPERTY_CODEBLOG_BASKET_CODE',
+            'PROPERTY_CODEBLOG_BASKET_HASH',
+            'PROPERTY_CODEBLOG_BASKET_VALUE',
+            'PROPERTY_CODEBLOG_USER_ID',
+            'PROPERTY_CODEBLOG_BASKET_DATE',
+            'PROPERTY_CODEBLOG_NOTIFY_PHONE_VALUE',
+            'PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE',
+            'PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_PHONE',
+            'PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL',
+            'PROPERTY_CODEBLOG_NUMBER_OF_USES',
+        ];
+        $filter   = [
+            'IBLOCK_ID'                     => self::getStorageId(),
+            'PROPERTY_CODEBLOG_BASKET_CODE' => (int)$basketCode
+        ];
 
         $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
 
-        $baketValue = '';
+        $basketElement = $iBlockItemsCollection->Fetch();
 
-        if ($item = $iBlockItemsCollection->Fetch()) {
+        $basket = new Basket(
+            $basketElement['ID'],
+            $basketElement['PROPERTY_CODEBLOG_BASKET_CODE_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_BASKET_VALUE_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_BASKET_HASH_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_BASKET_DATE_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_USER_ID_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_NOTIFY_EMAIL_VALUE_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_NOTIFY_QUANT_TO_EMAIL_VALUE'],
+            $basketElement['PROPERTY_CODEBLOG_NUMBER_OF_USES_VALUE']
+        );
 
-            $baketValue             = $item['PROPERTY_CODEBLOG_BASKET_VALUE_VALUE'];
-            $baketCountOfUses       = $item['PROPERTY_CODEBLOG_NUMBER_OF_USES_VALUE'];
-            $baketElementIdInIblock = $item['ID'];
-
-            self::increaseTheCountOfUses($baketElementIdInIblock, $baketCountOfUses);
-        }
-
-        return $baketValue;
-
+        return $basket;
     }
 
 }

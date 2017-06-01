@@ -23,6 +23,10 @@ class EmptyStorage implements SaveAndRestore
         return false;
     }
 
+    public static function getBasketByCode($basketCode) {
+        return false;
+    }
+
     public static function increaseTheCountOfSending($basketId) {
         return false;
     }

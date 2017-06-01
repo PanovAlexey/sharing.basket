@@ -11,6 +11,7 @@
 namespace CodeBlog\SharingBasket\Storage;
 
 use \Bitrix\Highloadblock\HighloadBlockTable;
+use \CodeBlog\SharingBasket\Basket\Basket;
 
 \Bitrix\Main\Loader::includeModule('highloadblock');
 
@@ -305,35 +306,25 @@ class Highloadblock implements SaveAndRestore
     }
 
     /**
-     * @param int $basketId
+     * @param int $basketCode
      * @param string $emailValue
      *
      * @return $isEmailUpdate bool
      */
-    public static function saveEmailValue($basketId, $emailValue) {
-        $basketId  = (int)$basketId;
+    public static function saveEmailValue($basketCode, $emailValue) {
+
         $dataClass = self::getCurrentDataClass();
+
         $isEmailUpdate = false;
 
-        $basketElement = $dataClass::getList(
-            [
-                'select' => [
-                    'ID',
-                    'UF_NOTIFY_MAIL_VAL',
-                ],
-                'filter' => [
-                    'UF_BASKET_CODE' => $basketId
-                ]
-            ]
-        );
-        $basket = $basketElement->fetch();
+        $basket = self::getBasketByCode($basketCode);
 
-        if (!empty($basket['UF_NOTIFY_MAIL_VAL'])) {
-            if (!in_array($emailValue, explode(',', $basket['UF_NOTIFY_MAIL_VAL']))) {
-                $emailNewValue = trim($basket['UF_NOTIFY_MAIL_VAL']) . ',' . $emailValue;
+        if (!empty($basket->getNotifyEmailValue())) {
+            if (!in_array($emailValue, explode(',', $basket->getNotifyEmailValue()))) {
+                $emailNewValue = trim($basket->getNotifyEmailValue()) . ',' . $emailValue;
                 $isEmailUpdate = true;
             } else {
-                $emailNewValue = $basket['UF_NOTIFY_MAIL_VAL'];
+                $emailNewValue = $basket->getNotifyEmailValue();
             }
         } else {
             $emailNewValue = $emailValue;
@@ -341,7 +332,7 @@ class Highloadblock implements SaveAndRestore
         }
 
         $dataClass::update(
-            (int)$basket['ID'],
+            $basket->getId(),
             [
                 'UF_NOTIFY_MAIL_VAL' => $emailNewValue
             ]
@@ -352,32 +343,22 @@ class Highloadblock implements SaveAndRestore
     }
 
     /**
-     * @param int $basketId
+     * @param int $basketCode
      *
      * @return void
      */
-    public static function increaseTheCountOfSending($basketId) {
-        $basketId  = (int)$basketId;
+    public static function increaseTheCountOfSending($basketCode) {
+
         $dataClass = self::getCurrentDataClass();
 
-        $basketElement = $dataClass::getList(
-            [
-                'select' => [
-                    'ID',
-                    'UF_NOTIFY_QNT_MAIL'
-                ],
-                'filter' => [
-                    'UF_BASKET_CODE' => $basketId
-                ]
-            ]
-        );
-        $basket = $basketElement->fetch();
-        $baketCountOfUses    = (int)$basket['UF_NOTIFY_QNT_MAIL'];
+        $basket = self::getBasketByCode($basketCode);
+
+        $basketCountOfSendingToEmail = $basket->getNotifyQuantityToEmail();
 
         $dataClass::update(
-            (int)$basket['ID'],
+            $basket->getId(),
             [
-                'UF_NOTIFY_QNT_MAIL' => ++$baketCountOfUses
+                'UF_NOTIFY_QNT_MAIL' => ++$basketCountOfSendingToEmail
             ]
         );
 
@@ -418,6 +399,11 @@ class Highloadblock implements SaveAndRestore
         return (bool)$this->getStorageId();
     }
 
+    /**
+     * @param $hash
+     *
+     * @return int
+     */
     protected function basketIsExistByHash($hash) {
 
         $baketCode = 0;
@@ -491,39 +477,60 @@ class Highloadblock implements SaveAndRestore
     protected static function increaseTheCountOfUses($basketId, $baketCountOfUses) {
 
         $basketId            = (int)$basketId;
-        $baketCountOfUses    = (int)$baketCountOfUses;
-        $newBaketCountOfUses = $baketCountOfUses + 1;
+        $newBaketCountOfUses = (int)$baketCountOfUses + 1;
         $dataClass           = self::getCurrentDataClass();
 
         $dataClass::update($basketId, ['UF_NUMBER_OF_USES' => $newBaketCountOfUses]);
     }
 
-    public function restoreBasketItemsListFromStorage($basketId) {
+    /**
+     * @param $basketCode
+     *
+     * @return mixed
+     */
+    public function restoreBasketItemsListFromStorage($basketCode) {
 
-        $basketId       = (int)$basketId;
+        $basket = self::getBasketByCode($basketCode);
+
+        self::increaseTheCountOfUses($basket->getId(), $basket->getNumberOfUses());
+
+        return $basket->getValue();
+
+    }
+
+    /**
+     * @param int $basketCode
+     *
+     * @return \CodeBlog\SharingBasket\Basket\Basket Basket
+     */
+    public static function getBasketByCode($basketCode) {
+
         $dataClass      = self::getCurrentDataClass();
 
-        $basketElement = $dataClass::getList(
+        $basketEntity = $dataClass::getList(
             [
-                'select' => [
-                    'ID',
-                    'UF_BASKET_VALUE',
-                    'UF_NUMBER_OF_USES'],
+                'select' => ['*'],
                 'filter' => [
-                    'UF_BASKET_CODE' => $basketId
+                    'UF_BASKET_CODE' => (int)$basketCode
                 ]
             ]
         );
 
-        $basket = $basketElement->fetch();
+        $basketElement = $basketEntity->fetch();
 
-        $baketCountOfUses        = $basket['UF_NUMBER_OF_USES'];
-        $baketElementIdInHlBlock = $basket['ID'];
+        $basket = new Basket(
+            $basketElement['ID'],
+            $basketElement['UF_BASKET_CODE'],
+            $basketElement['UF_BASKET_VALUE'],
+            $basketElement['UF_BASKET_HASH'],
+            $basketElement['UF_BASKET_DATE'],
+            $basketElement['UF_USER_ID'],
+            $basketElement['UF_NOTIFY_MAIL_VAL'],
+            $basketElement['UF_NOTIFY_QNT_MAIL'],
+            $basketElement['UF_NUMBER_OF_USES']
+        );
 
-        self::increaseTheCountOfUses($baketElementIdInHlBlock, $baketCountOfUses);
-
-        return $basket['UF_BASKET_VALUE'];
-
+        return $basket;
     }
 
 }

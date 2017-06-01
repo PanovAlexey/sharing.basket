@@ -18,6 +18,8 @@ interface SaveAndRestore
 {
     public static function deleteStorage($storageId);
 
+    public static function getBasketByCode($basketCodeValue);
+
     public function createStorage();
 
     public function getStorageId();

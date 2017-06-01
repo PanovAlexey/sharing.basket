@@ -10,155 +10,128 @@
 
 namespace CodeBlog\SharingBasket\Basket;
 
-use Bitrix\Main\Context;
-use Bitrix\Sale\Fuser;
-use Bitrix\Sale\Internals\BasketTable;
-use Bitrix\Currency\CurrencyManager;
-
-
+/**
+ * Class Basket
+ *
+ * @package CodeBlog\SharingBasket\Basket
+ */
 class Basket
 {
-
-    protected $itemsList  = [];
-    protected $basketHash = '';
-
-    protected function push($productId, $quantity, $delay) {
-
-        $productId = (int)$productId;
-        $quantity  = trim($quantity);
-        $delay     = trim($delay);
-
-        $this->itemsList[$productId] = ['QUANTITY' => $quantity,
-                                        'DELAY'    => $delay];
-    }
-
-    public function __construct() {
-
-    }
+    private $id;
+    private $code;
+    private $value;
+    private $hash;
+    private $date;
+    private $userId;
+    private $notifyEmailValue;
+    private $notifyQuantityToEmailValue;
+    private $numberOfUses;
 
     /**
-     * @return bool
-     */
-    public function isEmpty() {
-        return (empty($this->itemsList));
-    }
-
-    /**
-     * @return void
-     */
-    protected function setItemsList() {
-
-        $basketCollection = BasketTable::getList(['filter' => ['=FUSER_ID' => Fuser::getId(),
-                                                               '=ORDER_ID' => null]]);
-
-        while ($item = $basketCollection->fetch()) {
-            $this->push($item['PRODUCT_ID'], $item['QUANTITY'], $item['DELAY']);
-        }
-
-        $this->basketHashCalculate();
-    }
-
-    protected function basketHashCalculate() {
-
-        $basketHash  = '';
-        $itemsIdList = [];
-
-        foreach ($this->itemsList as $itemId => $itemFields) {
-            $itemsIdList[] = $itemId;
-        }
-
-        unset($itemId);
-
-        foreach ($itemsIdList as $itemId) {
-            $basketHash .= $itemId;
-            foreach ($this->itemsList[$itemId] as $fieldValue) {
-                $basketHash .= $fieldValue;
-            }
-
-        }
-
-        $this->basketHash = $basketHash;
-
-    }
-
-    /**
-     * @return json
-     */
-    public function getItemsListFormat($getBasketHash = false) {
-
-        $this->setItemsList();
-
-        if ($getBasketHash) {
-            return ['ITEMS_LIST_FORMAT' => $this->itemsListToFormat($this->itemsList),
-                    'BASKET_HASH'       => $this->basketHash];
-        } else {
-            return $this->itemsListToFormat($this->itemsList);
-        }
-
-    }
-
-    /**
-     * @param $itemId
+     * Basket constructor.
      *
+     * @param int $id
+     * @param     $code
+     * @param     $value
+     * @param     $hash
+     * @param     $date
+     * @param     $userId
+     * @param     $notifyEmailValue
+     * @param     $notifyQuantityToEmailValue
+     * @param     $numberOfUses
+     */
+    public function __construct(
+        $id,
+        $code,
+        $value,
+        $hash,
+        $date,
+        $userId,
+        $notifyEmailValue,
+        $notifyQuantityToEmailValue,
+        $numberOfUses
+    ) {
+        $this->id = (int)$id;
+        $this->code = (int)$code;
+        $this->value = trim($value);
+        $this->hash = trim($hash);
+        $this->date = trim($date);
+        $this->userId = (int)trim($userId);
+        $this->notifyEmailValue = trim($notifyEmailValue);
+        $this->notifyQuantityToEmailValue = (int)$notifyQuantityToEmailValue;
+        $this->numberOfUses = (int)$numberOfUses;
+    }
+
+    /**
      * @return int
      */
-    public function isProductExist($itemId) {
-
-        $itemId = (int)$itemId;
-
-        if ($itemId == 0) {
-            return false;
-        }
-
-        $select = ['*'];
-        $filter = ['ID' => $itemId];
-
-        $iBlockItemsCollection = \CIBlockElement::GetList([], $filter, false, false, $select);
-
-        return $iBlockItemsCollection->Fetch()['ID'] > 0;
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
-     * @param $itemsListFormat
-     *
-     * @return void
+     * @return int
      */
-    public function setBasketByItemsListFormat($itemsListFormat) {
-
-        $itemsList = $this->itemsListUnFormat($itemsListFormat);
-
-        $basket = \Bitrix\Sale\Basket::loadItemsForFUser(Fuser::getId(), Context::getCurrent()->getSite());
-        $basket->clearCollection();
-
-        foreach ($itemsList as $itemId => $itemFields) {
-
-            if ($this->isProductExist($itemId)) {
-
-                $item = $basket->createItem('catalog', $itemId);
-                $item->setFields(['QUANTITY'               => $itemFields['QUANTITY'],
-                                  'DELAY'                  => $itemFields['DELAY'],
-                                  'CURRENCY'               => CurrencyManager::getBaseCurrency(),
-                                  'LID'                    => Context::getCurrent()->getSite(),
-                                  'PRODUCT_PROVIDER_CLASS' => 'CCatalogProductProvider']);
-
-            }
-
-        }
-
-        $basket->save();
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
-     * @param array $itemsList
-     *
-     * @return string
+     * @return mixed
      */
-    private function itemsListToFormat(array $itemsList) {
-        return json_encode($itemsList);
+    public function getValue()
+    {
+        return $this->value;
     }
 
-    private function itemsListUnFormat($itemsListFormated) {
-        return json_decode($itemsListFormated, JSON_OBJECT_AS_ARRAY);
+    /**
+     * @return mixed
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotifyEmailValue()
+    {
+        return $this->notifyEmailValue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNotifyQuantityToEmail()
+    {
+        return $this->notifyQuantityToEmailValue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUses()
+    {
+        return $this->numberOfUses;
     }
 
 }
