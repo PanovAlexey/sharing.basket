@@ -13,7 +13,6 @@
 use Bitrix\Main\Application;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Config\Option;
-use Bitrix\Main\EventManager;
 use Bitrix\Main\IO\Directory;
 use Bitrix\Main\IO\File;
 use CodeBlog\SharingBasket\Storage;
@@ -34,8 +33,6 @@ class codeblog_sharingbasket extends \CModule
 
     public $PARTNER_NAME;
     public $PARTNER_URI;
-
-    public $C_EVENT_TYPE_NAME;
 
     public function __construct()
     {

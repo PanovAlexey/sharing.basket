@@ -40,8 +40,6 @@ class Helper
     {
 
         $filterString = '';
-        $selectString = '';
-
         $paramCounter = 0;
 
         foreach ($filter as $key => $value) {
