@@ -6,7 +6,7 @@
  * Time: 18:59
  *
  * @author    Alexey Panov <panov@codeblog.pro>
- * @copyright Copyright В© 2016, Alexey Panov
+ * @copyright Copyright © 2016, Alexey Panov
  */
 namespace CodeBlog\SharingBasket\Sending;
 
@@ -21,15 +21,26 @@ use \Bitrix\Main\Mail\Event;
 class Email implements Sending
 {
     const LIMIT_SENDING = 5;
+    const C_EVENT_TYPE_NAME = 'CODEBLOGPRO_CODE_SEND';
+    const C_EVENT_TYPE_NAME_RU = 'Отправка кода корзины';
+    const C_EVENT_TYPE_NAME_EN = 'Sending basket code';
+    const C_EVENT_TYPE_DESCRIPTION_RU = "
+#EMAIL# - E-Mail пользователя
+#BASKET_CODE# - код корзины";
+    const C_EVENT_MESSAGE_RU = "Здравствуйте!
+Код Вашей корзины на сайте #SITE_NAME# :
+#BASKET_CODE#
+";
+
 
     public static function send($recipient, $basket) {
 
         if ($basket->getNotifyQuantityToEmail() >= self::LIMIT_SENDING) {
 
             /**
-             * @ToDo: Р’С‹РЅРµСЃС‚Рё $request  РІ РѕС‚РґРµР»СЊРЅС‹Р№ РєР»Р°СЃСЃ,
-             * С‡С‚РѕР±С‹ СѓРЅРёС„РёС†РёСЂРѕРІР°С‚СЊ РІС‹РІРѕРґ СЃРѕРѕР±С‰РµРЅРёР№ Рѕ СЂРµР·СѓР»СЊС‚Р°С‚Рµ
-             * Рё РѕС€РёР±РѕРє РІ РјРѕРґСѓР»Рµ
+             * @ToDo: Вынести $request  в отдельный класс,
+             * чтобы унифицировать вывод сообщений о результате
+             * и ошибок в модуле
              */
             return($request = [
                 'STATUS' => false,
@@ -38,8 +49,8 @@ class Email implements Sending
         }
 
         /**
-         * @ToDo Р”РѕР±Р°РІРёС‚СЊ РґРѕР±Р°РІР»РµРЅРёРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ С‚РёРїР° С€Р°Р±Р»РѕРЅРѕРІ
-         * Рё С€Р°Р±Р»РѕРЅР° РїРёСЃСЊРјР° РїСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ РјРѕРґСѓР»СЏ
+         * @ToDo Добавить добавление соответствующего типа шаблонов
+         * и шаблона письма при установке модуля
          */
         $resultSend = Event::send([
             'EVENT_NAME' => 'CODEBLOGPRO_CODE_SEND',
@@ -51,8 +62,8 @@ class Email implements Sending
         ]);
 
         /**
-         * @Todo РїСЂРѕРІРµСЂРёС‚СЊ, РѕС‚РїСЂР°РІР»СЏРµС‚СЃСЏ Р»Рё Email
-         * РЅР° СЃР°РјРѕРј РґРµР»Рµ
+         * @Todo проверить, отправляется ли Email
+         * на самом деле
          */
         \CEvent::CheckEvents();
 

@@ -17,6 +17,7 @@ use Bitrix\Main\EventManager;
 use Bitrix\Main\IO\Directory;
 use Bitrix\Main\IO\File;
 use CodeBlog\SharingBasket\Storage;
+use CodeBlog\SharingBasket\Sending;
 
 Loc::loadMessages(__FILE__);
 
@@ -33,6 +34,8 @@ class codeblog_sharingbasket extends \CModule
 
     public $PARTNER_NAME;
     public $PARTNER_URI;
+
+    public $C_EVENT_TYPE_NAME;
 
     public function __construct()
     {
@@ -98,6 +101,99 @@ class codeblog_sharingbasket extends \CModule
 
     }
 
+    /**
+     * @return void
+     */
+    public function addEmailTypeAndEmailTemplate()
+    {
+        
+        $EventType = new CEventType;
+
+        $EventType->Add([
+            'EVENT_NAME'  => Sending\Email::C_EVENT_TYPE_NAME,
+            'NAME'        => Sending\Email::C_EVENT_TYPE_NAME_RU,
+            'LID'         => 'ru',
+            'DESCRIPTION' => Sending\Email::C_EVENT_TYPE_DESCRIPTION_RU
+        ]);
+
+        $EventType->Add([
+            'EVENT_NAME'  => Sending\Email::C_EVENT_TYPE_NAME,
+            'NAME'        => 'Sending basket code',
+            'LID'         => 'en',
+            'DESCRIPTION' => "
+#EMAIL# - E-Mail
+#BASKET_CODE# - basket code"
+        ]);
+
+        $emailTemplateFields['ACTIVE']      = 'Y';
+        $emailTemplateFields['EVENT_NAME']  = Sending\Email::C_EVENT_TYPE_NAME;
+        $emailTemplateFields['LID']         = ['s1'];
+        $emailTemplateFields['EMAIL_FROM']  = '#DEFAULT_EMAIL_FROM#';
+        $emailTemplateFields['EMAIL_TO']    = '#EMAIL#';
+        $emailTemplateFields['BCC']         = '';
+        $emailTemplateFields['SUBJECT']     = '#EMAIL#';
+        $emailTemplateFields['BODY_TYPE']   = 'text';
+        $emailTemplateFields['MESSAGE']     = Sending\Email::C_EVENT_MESSAGE_RU;
+
+        $eventMessage = new CEventMessage;
+        $eventMessage->Add($emailTemplateFields);
+
+        if (!empty($eventMessage->LAST_ERROR)) {
+            /**
+             * @Todo добавить вывод и логирование ошибки
+             */
+        }
+    }
+
+    /**
+     * @global $DB
+     *
+     * @return void
+     */
+    public function deleteEmailTypeAndEmailTemplate() {
+
+        global $DB;
+
+        CEventType::Delete(
+            [
+                'EVENT_NAME' => Sending\Email::C_EVENT_TYPE_NAME
+            ]
+        );
+
+        $eventMessage = new CEventMessage;
+        $DB->StartTransaction();
+        if(!$eventMessage->Delete($this->getMessageTemplateIdByName(Sending\Email::C_EVENT_TYPE_NAME))) {
+            $DB->Rollback();
+            /**
+             * @ToDo добавить вывод ошибки
+             */
+            //$strError .= GetMessage("DELETE_ERROR");
+        }
+        else $DB->Commit();
+    }
+
+    /**
+     * @param string $templateName
+     *
+     * @return array
+     */
+    public function getMessageTemplateIdByName($templateName) {
+
+        $filter = [
+            'TYPE_ID'       => [$templateName],
+        ];
+
+        $eventMessageCollection = CEventMessage::GetList($by = 'site_id', $order = 'desc', $filter);
+
+        $templatesIdList = [];
+
+        while($eventMessageItem = $eventMessageCollection->Fetch()) {
+            $templatesIdList = $eventMessageItem['ID'];
+        }
+
+        return $templatesIdList;
+    }
+
     public function DoInstall()
     {
 
@@ -127,6 +223,7 @@ class codeblog_sharingbasket extends \CModule
 
             $this->InstallFiles();
             $this->DoInstallStorage();
+            $this->addEmailTypeAndEmailTemplate();
 
             $APPLICATION->IncludeAdminFile(Loc::getMessage('CODEBLOG_SHARING_BASKET_INSTALL_TITLE', array(
                 '#MODULE#',
@@ -146,6 +243,7 @@ class codeblog_sharingbasket extends \CModule
 
         $this->UnInstallStorage();
         $this->UnInstallFiles();
+        $this->deleteEmailTypeAndEmailTemplate();
 
         Option::delete($this->MODULE_ID);
 
@@ -156,4 +254,6 @@ class codeblog_sharingbasket extends \CModule
             $this->MODULE_NAME
         )), __DIR__ . '/unstep.php');
     }
+
+
 }
