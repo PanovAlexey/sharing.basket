@@ -1,8 +1,5 @@
-#codeblog_basket_showing_enter_code {
-    display: none;
-}
 
-#basket-sharing-title {
+.basket-sharing-title {
     margin: 10px 0;
     text-align: center;
     color: #919191;
@@ -13,15 +10,7 @@
     font-weight: bold;
 }
 
-#enter_code_show {
-    float: left;
-}
-
-#codeblog_basket_save_basket {
-    float: right;
-}
-
-.save-basket-text {
+.title-basket-text {
     color: #000;
     text-decoration: none;
     font-weight: bold;
@@ -30,9 +19,61 @@
 
 }
 
-#save-basket-number {
+.save-basket-number {
     font-weight: bold;
     font-size: 22px;
+}
+
+.codeblog-basket-input {
+    border: medium none;
+    box-shadow: 0 1px 2px 0 #3e3e3e inset;
+    color: #555;
+    line-height: 1.2;
+    margin-top: 3px;
+    outline: medium none;
+    padding: 13px 10px;
+    width: 233px;
+    background: #f8fafc none repeat scroll 0 0;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: inherit;
+    height: 42px;
+}
+
+.codeblog-basket-input-button {
+    border: medium none;
+    box-shadow: 0 1px 2px 0 #3e3e3e inset;
+    color: #555;
+    line-height: 1.2;
+    margin-top: 3px;
+    outline: medium none;
+    padding: 13px 10px;
+    width: 233px;
+    background: #f8fafc none repeat scroll 0 0;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: inherit;
+    height: 42px;
+    background-color: #606060;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.09));
+    border: medium none;
+    box-shadow: inset 0 1px 2px 0 #3e3e3e;
+    color: #f2f2f2;
+    text-shadow: 0 1px 0 #505050;
+}
+
+.codeblog-basket-input-button:hover {
+    background: 0;
+    color: #919191;
+}
+
+.codeblog-basket-input-button-label {
+    font-weight: normal;
+    margin-top: 5px;
+}
+
+.js-codeblog-basket-notification-error {
+    color:#ff0000;
 }
 
 .basket-sharing-answer-link {
@@ -58,21 +99,29 @@
     color: #919191;
 }
 
-#codeblog-basket-answer {
+.basket-sharing-left {
+    float: left;
+}
+
+.basket-sharing-right {
+    float: right;
+}
+
+.codeblog-basket-answer {
     margin: 5px 30px 20px 30px;
 }
 
-#codeblog-basket-captcha-form {
+.codeblog-basket-captcha-form {
     margin: 0 auto;
     display: block;
     width: 180px;
 }
 
-#codeblog_basket_saving_completed {
+.codeblog-basket-hidden {
     display: none;
 }
 
-#codeblog_basket_notification {
+.codeblog-basket-notification {
     border: 1px solid #c9c9c9;
     border-radius: 3px;
     padding: 20px 10px 20px 25px;
@@ -138,38 +187,13 @@
     transition: opacity .2s linear;
 }
 
-.js-save-basket-form .basket-form-control input {
-    width: 233px;
-    border: none;
-    box-shadow: inset 0 1px 2px 0 #3e3e3e;
-    padding: 13px 10px;
-    line-height: 1.2;
-    color: #555;
-    outline: none;
-    margin-top: 3px;
-}
-
-.js-save-basket-form .basket-form-control input[type='submit'], .js-save-basket-form .basket-form-control input[type='button'] {
-    background-color: #606060;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.09));
-    border: medium none;
-    box-shadow: inset 0 1px 2px 0 #3e3e3e;
-    color: #f2f2f2;
-    text-shadow: 0 1px 0 #505050;
-}
-
-.js-save-basket-form .basket-form-control label {
-    font-weight: normal;
-    margin-top: 5px;
-}
-
-#codeblog_basket_saving_completed .js-save-basket-form .basket-form-control .js-print-saved-cart {
+.basket-form-control-form .basket-form-control .js-print-saved-cart {
     float: left;
     width: 110px;
     margin-top: 10px;
 }
 
-#codeblog_basket_saving_completed .js-save-basket-form .basket-form-control .js-submit-button {
+.basket-form-control-form .basket-form-control .js-submit-button {
     float: left;
     width: 110px;
     margin-left: 13px;

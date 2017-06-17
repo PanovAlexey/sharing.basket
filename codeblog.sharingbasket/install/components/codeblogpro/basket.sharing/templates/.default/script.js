@@ -1,8 +1,7 @@
 $(document).ready(function () {
 
-    $("#enter_code_apply").click(function () {
-
-        savedBAsketId = $("#saved-basket-id").val();
+    $(".js-submit-code-button").click(function () {
+        savedBAsketId = $(".js-saved-basket-id").val();
 
         var data = "saved_basket_id=" + savedBAsketId + "&basket_sharing_ajax=y";
 
@@ -12,10 +11,14 @@ $(document).ready(function () {
             data: data,
             success: function (responseMessage) {
                 if (typeof(responseMessage) == "number") {
-                    $("#enter_code_apply").html(responseMessage);
+                    $(".js-submit-code-button").html(responseMessage);
                 }
                 else {
-                    $("#codeblog_basket_notification").html(responseMessage);
+                    $(".js-codeblog-basket-notification-error").html(responseMessage);
+                    errorShow = setTimeout(function() {
+                        $(".js-codeblog-basket-notification-error").html('');
+                        clearTimeout(errorShow);
+                    }, 5000)
                 }
             }
         });
@@ -23,10 +26,10 @@ $(document).ready(function () {
         return false;
     });
 
-    $(".js-submit-button").click(function () {
+    $(".js-submit-send-button").click(function () {
         email = $('.js-basket-send-email').val();
         //phone = $('.js-basket-send-phone').val();
-        code = $('#save-basket-number').text();
+        code = $('.js-save-basket-number').text();
 
         var data = "email=" + email /*+ "&phone=" + phone*/ + "&send_basket=y" + "&basket_code=" + code;
 
@@ -50,25 +53,26 @@ $(document).ready(function () {
         return false;
     });
 
-    $("#enter_code_show").click(function () {
-        $("#codeblog_basket_showing_enter_code").fadeIn();
-        $("#codeblog-basket-answer").hide();
+    $(".js-enter-code-show").click(function () {
+        $(".js-codeblog-basket-showing-enter-code").fadeIn();
+        $(".js-codeblog-basket-answer").hide();
 
         return false;
     });
-    $(".codeblog-basket-close-icon").click(function () {
-        $(this).parents('#codeblog_basket_notification').fadeOut();
-    });
 
-    $("#codeblog_basket_save_basket").click(function () {
-        $('#codeblog_basket_notification').fadeIn();
-        $('.codeblog-basket-captcha-container').fadeIn();
+    $(".js-codeblog-notification-close").click(function () {
+        $(this).parents('.codeblog-basket-notification').fadeOut();
+        $('.js-codeblog-basket-answer').fadeIn();
 
         return false;
-
     });
 
     $(".js-class-codeblog-basket-save").click(function () {
+
+        $('.js-basket-notification-saving').fadeIn();
+        $('.codeblog-basket-captcha-container').fadeIn();
+        $(".js-codeblog-basket-answer").hide();
+        $('.js-codeblog-basket-saving-completed').fadeIn();
 
         var data = "save_basket=y" + "&basket_sharing_ajax=y";
 
@@ -83,18 +87,24 @@ $(document).ready(function () {
             data: data,
             success: function (responseMessage) {
                 if (responseMessage * 1 > 0) {
-                    $("#codeblog_basket_notification #save-basket-number").html(responseMessage);
+                    $(".js-basket-notification-saving .js-save-basket-number").html(responseMessage);
                     $('.codeblog-basket-captcha-container').fadeOut();
-                    $('#codeblog_basket_saving_completed').fadeIn();
-
-                    $("#codeblog-basket-answer").hide();
                 }
                 else {
-                    $("#codeblog_basket_notification").html(responseMessage);
+                    $(".js-basket-notification-saving").html(responseMessage);
                 }
 
             }
         });
+
+        return false;
+    });
+
+    $('.js-class-codeblog-basket-saving-show').click(function () {
+
+        $('.js-basket-notification-saving').fadeIn();
+        $('.codeblog-basket-captcha-container').fadeIn();
+        $(".js-codeblog-basket-answer").hide();
 
         return false;
     });

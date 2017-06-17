@@ -16,3 +16,4 @@ $MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE']       = 'Send';
 $MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_CODE_VALUE']  = 'Send code';
 $MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE'] = 'Enter the code saved basket. 
 Please note, if it is in the basket have the goods, they will be replaced';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_PRODUCTS_REPLACE_VALUE']  = 'Attention. If now there are goods in the basket, they will be replaced';

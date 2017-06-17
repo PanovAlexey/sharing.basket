@@ -13,5 +13,5 @@ $MESS['CODEBLOGPRO_COMPONENT_BASKET_NEED_AUTH_VALUE']         = 'Необходима авто
 $MESS['CODEBLOGPRO_COMPONENT_BASKET_PRINT_VALUE']             = 'Распечатать';
 $MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE']       = 'Отправить';
 $MESS['CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_CODE_VALUE']  = 'Отправить код';
-$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE'] = 'Введите код сохраненной корзины.
-        Внимание, если сейчас в корзине есть товары, они будут заменены';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE'] = 'Введите код сохраненной корзины.';
+$MESS['CODEBLOGPRO_COMPONENT_BASKET_PRODUCTS_REPLACE_VALUE']  = 'Внимание, если сейчас в корзине есть товары, они будут заменены';
