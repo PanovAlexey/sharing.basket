@@ -48,12 +48,10 @@
     margin-top: 3px;
     outline: medium none;
     padding: 13px 10px;
-    width: 233px;
     background: #f8fafc none repeat scroll 0 0;
     border-radius: 2px;
     font-family: inherit;
     font-size: inherit;
-    height: 42px;
     background-color: #606060;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0.09));
     border: medium none;
@@ -67,12 +65,22 @@
     color: #919191;
 }
 
+.input-middle-width {
+    width: 233px;
+    height: 42px;
+}
+
+.input-small-width {
+    width: 180px;
+    height: 42px;
+}
+
 .codeblog-basket-input-button-label {
     font-weight: normal;
     margin-top: 5px;
 }
 
-.js-codeblog-basket-notification-error {
+.codeblog-basket-notification-error {
     color:#ff0000;
 }
 
@@ -111,12 +119,6 @@
     margin: 5px 30px 20px 30px;
 }
 
-.codeblog-basket-captcha-form {
-    margin: 0 auto;
-    display: block;
-    width: 180px;
-}
-
 .codeblog-basket-hidden {
     display: none;
 }
@@ -137,41 +139,14 @@
 }
 
 .codeblog-basket-captcha-container {
-    width: 280px;
-    margin: 5px auto;
+    width: 180px;
+    margin: 0px auto;
     display: none;
 }
 
 .codeblog-basket-captcha-container img {
     margin-bottom: 3px;
     width: 100%;
-}
-
-.codeblog-basket-captcha-container input {
-    width: 100%;
-}
-
-.codeblog-basket-captcha-container .btn-captcha {
-    cursor: pointer;
-    text-align: center;
-    background: #70bb18;
-    border: 0;
-    color: #fff;
-    font-size: 13px;
-    position: relative;
-    text-transform: uppercase;
-    border-radius: 2px;
-    line-height: 30px;
-    height: 40px;
-    padding: 5px 0px;
-    width: 100%;
-    vertical-align: middle;
-    outline: 0;
-    transition: width 5s linear;
-}
-
-.codeblog-basket-captcha-container .btn-captcha:hover {
-    background: #7ec629;
 }
 
 .codeblog-basket-close-icon {
@@ -185,17 +160,4 @@
     top: 0;
     width: 27px;
     transition: opacity .2s linear;
-}
-
-.basket-form-control-form .basket-form-control .js-print-saved-cart {
-    float: left;
-    width: 110px;
-    margin-top: 10px;
-}
-
-.basket-form-control-form .basket-form-control .js-submit-button {
-    float: left;
-    width: 110px;
-    margin-left: 13px;
-    margin-top: 10px;
 }

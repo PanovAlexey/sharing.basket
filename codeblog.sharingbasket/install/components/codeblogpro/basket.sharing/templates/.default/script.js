@@ -14,9 +14,9 @@ $(document).ready(function () {
                     $(".js-submit-code-button").html(responseMessage);
                 }
                 else {
-                    $(".js-codeblog-basket-notification-error").html(responseMessage);
+                    $(".js-codeblog-basket-showing-enter-code .js-codeblog-basket-notification-error").html(responseMessage);
                     errorShow = setTimeout(function() {
-                        $(".js-codeblog-basket-notification-error").html('');
+                        $(".js-codeblog-basket-showing-enter-code .js-codeblog-basket-notification-error").html('');
                         clearTimeout(errorShow);
                     }, 5000)
                 }
@@ -64,15 +64,22 @@ $(document).ready(function () {
         $(this).parents('.codeblog-basket-notification').fadeOut();
         $('.js-codeblog-basket-answer').fadeIn();
 
+        $('.js-codeblog-basket-saving-completed').hide();
+
         return false;
     });
 
     $(".js-class-codeblog-basket-save").click(function () {
 
-        $('.js-basket-notification-saving').fadeIn();
-        $('.codeblog-basket-captcha-container').fadeIn();
         $(".js-codeblog-basket-answer").hide();
-        $('.js-codeblog-basket-saving-completed').fadeIn();
+        
+        if (captchaIsShow != 'true') {
+            $('.js-basket-notification-saving').fadeIn();
+            $('.codeblog-basket-captcha-container').fadeIn();
+            $('.js-codeblog-basket-saving-completed').fadeIn(function() {
+                $('.js-codeblog-basket-saving-completed').removeClass('codeblog-basket-hidden');
+            });
+        }
 
         var data = "save_basket=y" + "&basket_sharing_ajax=y";
 
@@ -86,12 +93,26 @@ $(document).ready(function () {
             url: window.location.href,
             data: data,
             success: function (responseMessage) {
+
                 if (responseMessage * 1 > 0) {
+
+                    if (captchaIsShow == 'true') {
+                        $('.js-basket-notification-saving').fadeIn();
+                        $('.codeblog-basket-captcha-container').fadeIn();
+                        $('.js-codeblog-basket-saving-completed').fadeIn(function() {
+                            $('.js-codeblog-basket-saving-completed').removeClass('codeblog-basket-hidden');
+                        });
+                    }
+
                     $(".js-basket-notification-saving .js-save-basket-number").html(responseMessage);
                     $('.codeblog-basket-captcha-container').fadeOut();
                 }
                 else {
-                    $(".js-basket-notification-saving").html(responseMessage);
+                    $(".js-basket-notification-saving .basket-form-control .js-codeblog-basket-notification-error").html(responseMessage);
+                    errorShow = setTimeout(function() {
+                        $(".js-basket-notification-saving .basket-form-control .js-codeblog-basket-notification-error").html('');
+                        clearTimeout(errorShow);
+                    }, 5000)
                 }
 
             }

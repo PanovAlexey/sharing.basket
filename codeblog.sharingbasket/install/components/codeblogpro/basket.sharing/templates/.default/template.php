@@ -8,25 +8,28 @@ use Bitrix\Main\Localization\Loc;
     <a class="codeblog-basket-close-icon js-codeblog-notification-close" href="#"></a>
     <? if ($arResult['CAPTCHA']['SHOW']) { ?>
         <div style="clear: both"></div>
-        <div class="codeblog-basket-captcha-container">
-            <div class="bx-block-title">Введите слово</div>
-            <div class="bx-subscribe">
-                <form class="codeblog-basket-captcha-form" name="<?= $arResult['CAPTCHA']['FORM']['NAME'] ?>"
-                      method="post">
-                    <input name="sessid" id="sessid" value="0556ab097900b3d8b29ddb58dcc2ab01" type="hidden">
-                    <input type="hidden" name="<?= $arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME'] ?>"
-                           value="<?= $arResult['CAPTCHA']['CODE'] ?>">
-                    <img src="/bitrix/tools/captcha.php?captcha_sid=<?= $arResult['CAPTCHA']['CODE'] ?>" alt="CAPTCHA">
-                    <div class="bx-input-group">
-                        <input class="bx-form-control"
-                               name="<?= $arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME'] ?>" value=""
-                               title="Введите код с картинки" placeholder="Введите код с картинки" type="text">
-                    </div>
-                    <button class="sender-btn btn-captcha js-class-codeblog-basket-save">Подтвердить</button>
-                </form>
+        <div class="basket-form-control">
+            <div class="codeblog-basket-captcha-container">
+                <p class="title-basket-text">Введите слово</p>
+                <p class="codeblog-basket-notification-error js-codeblog-basket-notification-error"></p>
+                <div>
+                    <form class="codeblog-basket-captcha-form" name="<?= $arResult['CAPTCHA']['FORM']['NAME'] ?>"
+                          method="post">
+                        <input name="sessid" id="sessid" value="0556ab097900b3d8b29ddb58dcc2ab01" type="hidden">
+                        <input type="hidden" name="<?= $arResult['CAPTCHA']['FORM']['INPUT']['SID']['NAME'] ?>"
+                               value="<?= $arResult['CAPTCHA']['CODE'] ?>">
+                        <img class="input-small-width" src="/bitrix/tools/captcha.php?captcha_sid=<?= $arResult['CAPTCHA']['CODE'] ?>" alt="CAPTCHA">
+                        <div class="bx-input-group">
+                            <input class="codeblog-basket-input input-small-width"
+                                   name="<?= $arResult['CAPTCHA']['FORM']['INPUT']['WORD']['NAME'] ?>" value=""
+                                   title="Введите код с картинки" placeholder="Введите код с картинки" type="text">
+                        </div>
+                        <button class="codeblog-basket-input-button input-small-width js-class-codeblog-basket-save">Подтвердить</button>
+                    </form>
+                </div>
             </div>
+            <div style="clear: both"></div>
         </div>
-        <div style="clear: both"></div>
     <? } ?>
     <div class="codeblog-basket-hidden js-codeblog-basket-saving-completed">
         <p class="title-basket-text"><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_SAVED_SUCCESSFUL_VALUE') ?>:</p>
@@ -53,9 +56,9 @@ use Bitrix\Main\Localization\Loc;
                        type="text">
             </div>*/?>
             <div class="basket-form-control">
-                <input class="js-print-saved-cart codeblog-basket-input-button"
+                <input class="codeblog-basket-input-button input-middle-width js-print-saved-cart"
                        value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_PRINT_VALUE') ?>" type="button">
-                <input class="js-submit-send-button codeblog-basket-input-button"
+                <input class="codeblog-basket-input-button input-middle-width js-submit-send-button"
                        value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE') ?>" type="button">
             </div>
         </form>
@@ -80,7 +83,7 @@ use Bitrix\Main\Localization\Loc;
     <a class="codeblog-basket-close-icon js-codeblog-notification-close" href="#"></a>
     <p class="title-basket-text"><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_ENTER_CODE_PLEASE_VALUE') ?></p>
     <p><?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_PRODUCTS_REPLACE_VALUE') ?></p>
-    <p class="js-codeblog-basket-notification-error"></p>
+    <p class="codeblog-basket-notification-error js-codeblog-basket-notification-error"></p>
     <form class="js-saved-basket-number-form" method="post">
         <?= bitrix_sessid_post() ?>
         <input type="hidden" id="component_path" value="<?= $componentPath ?>">
@@ -88,7 +91,7 @@ use Bitrix\Main\Localization\Loc;
             <input class="codeblog-basket-input js-saved-basket-id" name="saved-basket-id" placeholder="xxxxxx" type="text">
         </div>
         <div class="basket-form-control">
-            <input class="js-submit-code-button codeblog-basket-input-button"
+            <input class="js-submit-code-button codeblog-basket-input-button input-middle-width"
                    value="<?= Loc::getMessage('CODEBLOGPRO_COMPONENT_BASKET_SEND_NOTICE_VALUE') ?>" type="submit">
         </div>
     </form>
