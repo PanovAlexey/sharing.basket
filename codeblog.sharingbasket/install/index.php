@@ -66,8 +66,6 @@ class codeblog_sharingbasket extends \CModule
 
     public function UnInstallFiles()
     {
-
-        File::deleteFile(Application::getDocumentRoot() . BX_ROOT . '/admin/codeblog_sharingbasket_edit_options.php');
         Directory::deleteDirectory(Application::getDocumentRoot() . BX_ROOT . '/components/codeblogpro/basket.sharing');
 
         return true;

@@ -26,60 +26,73 @@ IncludeModuleLangFile($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/' . $moduleId
 $tabsList = [
     [
         'DIV' => 'edit1',
-        'TAB' => 'Настройки',
+        'TAB' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_MAIN_OPTIONS_TITLE_VALUE'),
         'ICON' => '',
-        'TITLE' => 'Настройки'
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_MAIN_OPTIONS_TITLE_VALUE')
+            . Loc::getMessage('CODEBLOG_BASKET_SHARING_IN_FULL_VERSION_VALUE'),
     ]
 ];
 
 $groupsList = [
-    'MAIN' => ['TITLE' => 'Основные настройки', 'TAB' => 0],
+    'MAIN' => [
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_MAIN_OPTIONS_VALUE'),
+        'TAB' => 0
+    ],
 ];
 
 $optionsList = array(
     'TYPE_STORAGE' => [
         'GROUP' => 'MAIN',
-        'TITLE' => 'Тип хранилища',
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_TYPE_STORAGE_VALUE'),
         'TYPE' => 'STRING',
-        'DEFAULT' => Option::get('codeblog.sharingbasket', 'typeStorage'),
+        'VALUE' => '',
         'SORT' => '0',
-        'NOTES' => 'Место хранения сохраненных корзин. Задается при установке модуля.',
-        'OTHER_PARAMETERS' => 'disabled',
+        'NOTES' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_TYPE_STORAGE_NOTES_VALUE'),
+        'OTHER_PARAMETERS' => 'disabled value="' . Option::get('codeblog.sharingbasket', 'typeStorage') . '"',
     ],
     'IS_USE_SENDING_EMAIL' => [
         'GROUP' => 'MAIN',
-        'TITLE' => 'Отправка номера корзины на Email',
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_IS_SENDING_TO_EMAIL_VALUE'),
         'TYPE' => 'CHECKBOX',
         'REFRESH' => 'Y',
         'SORT' => '10',
-        'NOTES' => 'Позволить отправлять номер сохраненной корзины на Email.',
+        'OTHER_PARAMETERS' => 'disabled="disabled"',
+        'NOTES' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_ALLOW_IS_SENDING_TO_EMAIL_VALUE'),
     ],
     'IS_USE_SENDING_PHONE' => [
         'GROUP' => 'MAIN',
-        'TITLE' => 'Отправка номера корзины на телефон',
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_IS_SENDING_TO_PHONE_VALUE'),
         'TYPE' => 'CHECKBOX',
         'REFRESH' => 'N',
         'SORT' => '20',
         'OTHER_PARAMETERS' => 'disabled="disabled"',
-        'NOTES' => 'Позволить отправлять номер сохраненной корзины на мобильный телефон.',
+        'NOTES' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_ALLOW_IS_SENDING_TO_PHONE_VALUE'),
     ],
     'LOG_IS_USE' => [
         'GROUP' => 'MAIN',
-        'TITLE' => 'Использовать логирование',
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_IS_USE_LOGGING_VALUE'),
         'TYPE' => 'CHECKBOX',
         'REFRESH' => (Option::get('codeblog.sharingbasket', 'LOG_IS_USE')) ? Option::get('codeblog.sharingbasket', 'LOG_IS_USE') : 'Y',
         'SORT' => '100',
-        'NOTES' => 'Сохранять информацю о совершенных модулем дейсвтиях для последуюшего анализа или выявления ошибок.',
+        'OTHER_PARAMETERS' => 'disabled="disabled"',
+        'NOTES' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_IS_USE_LOGGING_NOTES_VALUE'),
     ],
     'LOG_FILE_NAME' => [
         'GROUP' => 'MAIN',
-        'TITLE' => 'Имя лог файла',
+        'TITLE' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_LOG_FILE_NAME_VALUE'),
         'TYPE' => 'STRING',
         'DEFAULT' => empty(Option::get('codeblog.sharingbasket', 'LOG_FILE_NAME')) ? 'log.txt' : Option::get('codeblog.sharingbasket', 'LOG_FILE_NAME'),
         'SORT' => '110',
-        'NOTES' => 'Имя лог файла.',
+        'NOTES' => Loc::getMessage('CODEBLOG_SHARING_BASKET_OPTIONS_LOG_FILE_NAME_NOTES_VALUE'),
+        'OTHER_PARAMETERS' => 'disabled="disabled"',
     ],
 );
 
-$options = new Vendor\CModuleOptions($moduleId, $tabsList, $groupsList, $optionsList);
+
+$options = new Vendor\CModuleOptions(
+    $moduleId,
+    $tabsList,
+    $groupsList,
+    $optionsList
+);
 $options->ShowHTML();
