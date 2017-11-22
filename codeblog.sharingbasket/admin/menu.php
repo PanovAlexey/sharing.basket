@@ -4,15 +4,18 @@ use \Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 
 if ($APPLICATION->GetGroupRight('codeblog.sharingbasket') > 'D') {
-    $menu = ['parent_menu' => 'global_menu_store',
-             'sort'        => 100,
-             'url'         => 'codeblog_sharingbasket_edit_options.php?lang=' . LANGUAGE_ID,
-             'text'        => 'ĞĞ°ÑÑ‚Ñ€Ğ¾Ğ¹ĞºĞ¸ Ğ¼Ğ¾Ğ´ÑƒĞ»Ñ ÑĞ¾Ñ…Ñ€Ğ°Ğ½ĞµĞ½Ğ¸Ñ/Ğ²Ğ¾ÑÑÑ‚Ğ°Ğ½Ğ¾Ğ²Ğ»ĞµĞ½Ğ¸Ñ ĞºĞ¾Ñ€Ğ·Ğ¸Ğ½',
-             'title'       => 'Ğ¢ĞµĞºÑÑ‚ Ğ¿Ğ¾Ğ´ÑĞºĞ°Ğ·ĞºĞ¸',
-             'icon'        => 'form_menu_icon',
-             'page_icon'   => 'form_page_icon',
-             'items_id'    => 'menu_codeblog_sharingbasket',
-             'items'       => []];
+    $menu = [
+        'parent_menu' => 'global_menu_store',
+        'sort'        => 100,
+        'url'         => 'codeblog_sharingbasket_edit_options.php?lang='
+            .LANGUAGE_ID,
+        'text'        => 'Íàñòğîéêè ìîäóëÿ ñîõğàíåíèÿ/âîññòàíîâëåíèÿ êîğçèí',
+        'title'       => 'Òåêñò ïîäñêàçêè',
+        'icon'        => 'form_menu_icon',
+        'page_icon'   => 'form_page_icon',
+        'items_id'    => 'menu_codeblog_sharingbasket',
+        'items'       => [],
+    ];
 
     return $menu;
 }
